@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Booking } from '../../booking';
 import { Calday } from './calday';
 import { Calmonth } from './calmonth';
@@ -9,7 +9,7 @@ import { Calmonth } from './calmonth';
   templateUrl: './month.component.html',
   styleUrls: ['./month.component.css']
 })
-export class MonthComponent implements OnInit {
+export class MonthComponent implements OnInit, OnChanges {
   @Input() bookings: Booking[];
   @Input() offsetMonth: number;
   year: number;
@@ -25,6 +25,11 @@ export class MonthComponent implements OnInit {
     this.caldays = calmonth.caldays;
   }
 
-
+  ngOnChanges(changes: any): void {
+    const calmonth = new Calmonth(this.offsetMonth, this.bookings);
+    this.year = calmonth.year;
+    this.month = calmonth.month;
+    this.caldays = calmonth.caldays;
+  }
 
 }

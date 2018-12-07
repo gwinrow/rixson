@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
 import { BreakPointsService } from '../break-points.service';
 import { ScreenSize } from '../screen-size.enum';
 import { Subscription } from 'rxjs';
@@ -11,13 +11,15 @@ import { Caravan } from '../caravan';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit, OnDestroy {
+export class CalendarComponent implements OnInit, OnDestroy, OnChanges {
+
   @Input() caravan: Caravan;
   size = ScreenSize.MEDIUM;
   currentOffset = 0;
   bookings: Booking[];
   monthOffsets: number[];
   subs: Subscription;
+  subsBooking: Subscription;
 
   updateOffset(offset: number) {
     if ((this.currentOffset > 0 && this.currentOffset < 12) ||
@@ -52,7 +54,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getScreenSize();
-    this.bookingService.getCaravanBookings(this.caravan.id)
+    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id)
+      .subscribe((bookings: Booking[]) => this.bookings = bookings);
+  }
+
+  ngOnChanges(changes: any): void {
+    this.currentOffset = 0;
+    this.setMonthOffsets();
+    if (this.subs !== undefined) {
+      this.subsBooking.unsubscribe();
+    }
+    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id)
       .subscribe((bookings: Booking[]) => this.bookings = bookings);
   }
 
