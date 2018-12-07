@@ -1,0 +1,58 @@
+<h1>Find us</h1>
+<div class="contact" *ngIf="size!=screenSize.SMALL && size!=screenSize.XSMALL">
+    <div>
+    <h2>Office</h2>
+    <p>
+      Rixson Leisure Holidays <br>
+      Thistledown, <br>
+      Spilsby road, <br>
+      Wainfleet, <br>
+      Skegness, <br>
+      PE24 4LN <br>
+      <i class="material-icons">phone</i> 01754 881337
+    </p>
+  </div>
+  <div>
+    <h2>Caravan Park</h2>
+    <p>
+      <img src="/assets/CoastfieldsHolidayParks.png">
+      Coastfields Holiday Parks <br>
+      Roman Bank, <br>
+      Ingoldmells, <br>
+      Skegness <br>
+      PE25 1LT, <br>
+      UK.<br>
+      <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Coastfields+holiday+parks&query_place_id=ChIJsdANFkvG10cRacZYkf8gVuU">View on Google Maps</a>
+    </p>
+  </div>
+  </div>
+  
+<div *ngIf="size==screenSize.SMALL || size==screenSize.XSMALL">
+  <h2>Office</h2>
+  <mat-card>
+    <mat-card-title>Rixson Leisure Holidays</mat-card-title>
+    <mat-card-content>
+    Thistledown, <br>
+    Spilsby road, <br>
+    Wainfleet, <br>
+    Skegness, <br>
+    PE24 4LN <br>
+    <i class="material-icons">phone</i> 01754 881337
+    </mat-card-content>
+  </mat-card>
+  <h2>Caravan Park</h2>
+  <mat-card>
+    <img mat-card-image src="/assets/CoastfieldsHolidayParks.png">
+    <mat-card-title>Coastfields Holiday Parks</mat-card-title>
+    <mat-card-content>
+    Roman Bank, <br>
+    Ingoldmells, <br>
+    Skegness <br>
+    PE25 1LT, <br>
+    UK.
+    </mat-card-content>
+    <mat-card-actions>
+      <a mat-button target="_blank" href="https://www.google.com/maps/search/?api=1&query=Coastfields+holiday+parks&query_place_id=ChIJsdANFkvG10cRacZYkf8gVuU">View on Google Maps</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

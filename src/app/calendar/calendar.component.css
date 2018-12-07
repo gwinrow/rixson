@@ -1,0 +1,26 @@
+div#calContainer {
+    display: flex;
+    min-width: 350px;
+}
+div.calControl {
+    width: 20px;
+    height: 272px;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    background-color: lightgray;
+}
+div.calControl.calpointer {
+    cursor: pointer;
+}
+div.calControl.left {
+    margin: 20px 10px 20px 0;
+    border-top-left-radius: 20px 150px;
+    border-bottom-left-radius: 20px 150px;
+}
+div.calControl.right {
+    margin: 20px 0 20px 10px;
+    border-top-right-radius: 20px 150px;
+    border-bottom-right-radius: 20px 150px;
+}
+div.calControl i {
+    line-height: 272px;   
+}

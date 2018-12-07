@@ -1,0 +1,18 @@
+<div *ngIf="caravan">
+  <mat-toolbar color="primary">
+      <h1>{{caravan.name}}</h1>
+      <span>
+        <button *ngIf="prevCaravan" mat-icon-button matTooltip="see previous caravan" routerLink="/view-caravan/{{prevCaravan.id}}"><i class="material-icons">keyboard_arrow_left</i></button>
+        <button *ngIf="nextCaravan" mat-icon-button matTooltip="see next caravan" routerLink="/view-caravan/{{nextCaravan.id}}"><i class="material-icons">keyboard_arrow_right</i></button>
+      </span>
+  </mat-toolbar>
+  <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+  <p>
+    location: {{caravan.location}} berths: {{caravan.berths}} grade: {{caravan.grade}}<br>
+    <ng-container *ngIf="caravan.smoking"><i class="material-icons" matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</i></ng-container>
+    <ng-container *ngIf="caravan.pets"><i class="material-icons"matTooltip="pets are allowed" matTooltipPosition="above">pets</i></ng-container>
+  </p>  
+  <h2>{{caravan.summary}}</h2>
+  <p>{{caravan.description}}</p>
+  <app-calendar [caravan]="caravan"></app-calendar>
+</div>

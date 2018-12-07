@@ -1,0 +1,32 @@
+<mat-card class="mat-toolbar mat-primary">
+	<mat-card-title>Welcome</mat-card-title>
+	<mat-card-content>
+		<h3>Hi De Hi Campers!</h3>
+		<p>
+			Welcome to our rental caravan site. 
+			We are a small family business with an assortment of 6 and 8 berth caravans 
+			sited on Coastfields caravan park in Ingoldmells, Skegness.
+		</p>
+		<p class="contact"><i class="material-icons">phone</i> 01754 881 337 / <i class="material-icons">smartphone</i> 07825 183 774 / 
+			<i class="material-icons">email</i>&nbsp;<a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a>
+		</p>
+	</mat-card-content>
+</mat-card>
+
+<div id="caravan-grid">
+	<h1>Our caravans</h1>
+	<mat-grid-list [cols]="getCols()" rowHeight="2:1" gutterSize="20px">
+		<mat-grid-tile routerLink="/view-caravan/{{caravan.id}}" *ngFor="let caravan of caravans" 
+		[ngStyle]="{'background': 'url('+caravan.imageRefs[0]+') center/100% no-repeat'}">
+			<mat-grid-tile-header>{{caravan.name}}</mat-grid-tile-header>
+			
+			<mat-grid-tile-footer >
+				{{caravan.berths}} berth caravan.  {{caravan.grade}} grade.
+				<span>
+					<ng-container *ngIf="caravan.smoking"><i class="material-icons" matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</i></ng-container>
+					<ng-container *ngIf="caravan.pets"><i class="material-icons"matTooltip="pets are allowed" matTooltipPosition="above">pets</i></ng-container>
+				</span>
+			</mat-grid-tile-footer>
+		</mat-grid-tile>
+	</mat-grid-list>
+</div>

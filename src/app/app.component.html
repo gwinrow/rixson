@@ -1,20 +1,50 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="mat-typography">
+  <mat-toolbar color="accent">
+    <button mat-button routerLink="/"><h1>Rixson Leisure</h1></button>
+    
+    <span *ngIf="size!=screenSize.SMALL && size!=screenSize.XSMALL">
+      <button mat-icon-button matTooltip="Home" routerLink="/"><i class="material-icons">home</i></button>
+      <button mat-icon-button matTooltip="Price list" routerLink="/prices"><i class="material-icons">monetization_on</i></button>
+      <button mat-icon-button matTooltip="General Information" routerLink="/info"><i class="material-icons">info</i></button>
+      <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
+      <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
+    </span>
+    <button mat-button [mat-menu-trigger-for]="menu" *ngIf="size==screenSize.SMALL || size==screenSize.XSMALL">
+      <mat-icon>menu</mat-icon>
+    </button> 
+  </mat-toolbar>
+  <mat-menu x-position="before" #menu="matMenu" panel-class="primary">
+    <button mat-icon-button matTooltip="Home" routerLink="/"><i class="material-icons">home</i></button>
+    <button mat-icon-button matTooltip="Price list" routerLink="/prices"><i class="material-icons">monetization_on</i></button>
+    <button mat-icon-button matTooltip="General Information" routerLink="/info"><i class="material-icons">info</i></button>
+    <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
+    <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
+  </mat-menu>
+  <div id="content" class="mat-app-background" [ngClass]="largeClass">
+  <router-outlet></router-outlet>
+  </div>
+  
+<!--   <span class="done">
+    <button mat-fab>
+      <mat-icon>check circle</mat-icon>
+    </button>
+  </span> -->
+    <footer class="mat-toolbar mat-accent">
+      <div>
+        Rixson Leisure Holidays, 
+        Thistledown, 
+        Spilsby road, 
+        Skegness, 
+        PE24 4LN <br> 
+        01754 881337 / 07825 183 774 / <a class="mat-toolbar mat-accent" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a>
+      </div>
+      <div>
+        Coastfields Holiday Parks,
+        Roman Bank, 
+        Ingoldmells, 
+        Skegness, 
+        PE25 1LT 
+      </div>
+      
+    </footer>    
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-

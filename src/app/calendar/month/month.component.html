@@ -1,0 +1,13 @@
+<div class="calendar">
+  <div class="header">{{month}}, {{year}}</div>
+  <div class="daylbls">S</div>
+  <div class="daylbls">M</div>
+  <div class="daylbls">T</div>
+  <div class="daylbls">W</div>
+  <div class="daylbls">T</div>
+  <div class="daylbls">F</div>
+  <div class="daylbls">S</div>
+  <ng-container *ngFor="let calday of caldays">
+    <div class="date {{calday.class}}">{{calday.day}}</div>
+  </ng-container>
+</div>

@@ -1,0 +1,12 @@
+<section>
+  <h2>See availability</h2>
+  <div id="calContainer">
+    <div class="calControl left" [ngClass]="{'calpointer' : currentOffset > 0}" (click)="updateOffset(-1)" matRipple [matRippleDisabled]='currentOffset <= 0'><i *ngIf="currentOffset > 0" class="material-icons" matTooltip="show last month">keyboard_arrow_left</i></div>
+    <ng-container *ngFor="let offset of monthOffsets">
+      <div *ngIf="bookings">
+        <app-month [bookings]="bookings" [offsetMonth]="offset"></app-month>
+      </div>
+    </ng-container>
+    <div class="calControl right" [ngClass]="{'calpointer' : currentOffset <= 11}" (click)="updateOffset(1)" matRipple [matRippleDisabled]='currentOffset > 11'><i *ngIf="currentOffset <= 11" class="material-icons" matTooltip="show next month">keyboard_arrow_right</i></div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+div#caravan-grid {
+    margin: 20px 0 20px 0;
+}
+mat-grid-tile {
+    cursor: pointer;
+}
+mat-grid-tile-footer {
+    justify-content: space-between;
+}
+p.contact i {
+    font-size: 1em;
+}
+mat-card a {
+    font-size: 1em;
+}

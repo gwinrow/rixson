@@ -1,0 +1,16 @@
+mat-card {
+    margin: 20px;
+}
+mat-card i {
+    font-size: 1em;
+}
+div.contact {
+    display: flex;
+    justify-content: space-between;
+}
+div.contact i {
+    font-size: 1em;
+}
+div.contact img {
+    float: right;
+}

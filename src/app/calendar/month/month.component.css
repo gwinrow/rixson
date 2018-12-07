@@ -1,0 +1,43 @@
+div.calendar {
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    width: 230px;
+    height: 272px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin: 20px 10px;
+}
+div.calendar .header {
+    width: 220px;
+    font-size: 22px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid lightgray;
+}
+div.calendar .daylbls {
+    width: 31px;
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px dotted lightgray;
+    margin-bottom: 5px;
+}
+div.calendar .date {
+    width: 31px;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+}
+div.calendar .date.checkin {
+    border-radius: 15px 0px 0px 15px;
+    background: #3f51b5;
+    color: #fff;
+}
+div.calendar .date.checkout {
+    border-radius: 0px 15px 15px 0px;
+    background: #3f51b5;
+    color: #fff;
+}
+div.calendar .date.booked {
+    background: #3f51b5;
+    color: #fff;
+}
