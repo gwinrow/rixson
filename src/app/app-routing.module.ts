@@ -5,6 +5,7 @@ import { PricesComponent } from './prices/prices.component';
 import { InfoComponent } from './info/info.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
+import { AuthGuard } from './auth.guard';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
 
 const routes: Routes = [
@@ -15,8 +16,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'view-caravan/:id', component: ViewCaravanComponent },
-//  { path: 'dashboard', component: DashboardComponent },
-//  { path: 'detail/:id', component: HeroDetailComponent },
+  { path: 'admin', loadChildren: './admin/admin.module#AdminModule', canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/home' }
 ];
 @NgModule({

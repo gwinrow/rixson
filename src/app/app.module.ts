@@ -2,6 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
+
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -25,15 +30,20 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
 
 import { NgxGalleryModule } from 'ngx-gallery';
-
-import { HomeComponent } from './home/home.component';
+import { CookieService } from 'ngx-cookie-service';
 
 import { CaravanService } from './caravan.service';
+import { BookingService } from './booking.service';
+import { CustomerService } from './customer.service';
+import { AuthService } from './auth.service';
+import { UserService } from './user.service';
+import { BreakPointsService } from './break-points.service';
+
+import { HomeComponent } from './home/home.component';
 import { PricesComponent } from './prices/prices.component';
 import { InfoComponent } from './info/info.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
-import { BreakPointsService } from './break-points.service';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { MonthComponent } from './calendar/month/month.component';
@@ -60,6 +70,9 @@ import { MonthComponent } from './calendar/month/month.component';
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }
     ),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     BrowserAnimationsModule,
     NgxGalleryModule,
     MatButtonModule,
@@ -76,7 +89,15 @@ import { MonthComponent } from './calendar/month/month.component';
     MatDividerModule,
     MatRippleModule
   ],
-  providers: [CaravanService, BreakPointsService],
+  providers: [
+    CaravanService,
+    BookingService,
+    CustomerService,
+    AuthService,
+    UserService,
+    BreakPointsService,
+    CookieService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

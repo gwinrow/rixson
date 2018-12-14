@@ -8,6 +8,11 @@
       <button mat-icon-button matTooltip="General Information" routerLink="/info"><i class="material-icons">info</i></button>
       <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
       <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
+      <ng-container *ngIf="loggedIn || adminCookie">
+        <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
+        <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">settings</i></button>
+        <button *ngIf="loggedIn" mat-icon-button matTooltip="Logoff" (click)="logoff()"><i class="material-icons">power_settings_new</i></button>  
+      </ng-container>
     </span>
     <button mat-button [mat-menu-trigger-for]="menu" *ngIf="size==screenSize.SMALL || size==screenSize.XSMALL">
       <mat-icon>menu</mat-icon>
@@ -19,6 +24,11 @@
     <button mat-icon-button matTooltip="General Information" routerLink="/info"><i class="material-icons">info</i></button>
     <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
     <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
+    <ng-container *ngIf="loggedIn || adminCookie">
+      <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
+      <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">settings</i></button>
+      <button *ngIf="loggedIn" mat-icon-button matTooltip="Logoff" (click)="logoff()"><i class="material-icons">power_settings_new</i></button>  
+    </ng-container>
   </mat-menu>
   <div id="content" class="mat-app-background" [ngClass]="largeClass">
   <router-outlet></router-outlet>
