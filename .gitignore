@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # google api keys
-/src/environments/*.ts
+src/environments/*.ts
 
 # compiled output
 /dist
