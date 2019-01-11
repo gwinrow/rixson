@@ -9,4 +9,7 @@ export class Caravan {
     berths: number;
     pets: boolean;
     smoking: boolean;
+    public constructor(init?: Partial<Caravan>) {
+        Object.assign(this, init);
+    }
 }

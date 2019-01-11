@@ -1,0 +1,56 @@
+form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+input[type=file] {
+    padding: 5px;
+    border-bottom: 1px solid white;
+}
+input[type=file].error {
+    border-bottom: 1px solid red;
+}
+label#images {
+    color: rgba(0,0,0,.6);
+}
+label#images.error {
+    color: red;
+}
+mat-form-field {
+    width: 100%;
+}
+
+mat-checkbox {
+    margin-right: 20px;
+}
+
+button {
+    margin-top: 20px;
+}
+
+.image {
+    margin: 10px;
+    padding: 20px;
+    width: 340px;
+    border: 1px solid lightgrey;
+    border-radius: 2%;
+}
+.image div {
+    margin-bottom: -40px;
+}
+.image img {
+    width: 100%;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    top: -50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.image button {
+    margin: 0;
+    position: relative;
+    z-index: 10;
+    left: 290px;
+    top: 10px;
+}

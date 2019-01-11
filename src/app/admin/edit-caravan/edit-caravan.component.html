@@ -1,0 +1,41 @@
+<h1>Edit details</h1>
+<a mat-button routerLink="/admin">Dashboard</a> &gt; <a mat-button routerLink="/admin/caravans">Caravans</a>
+<form [formGroup]="caravanForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name" required>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Grade" formControlName="grade">
+            <mat-option value="bronze">Bronze</mat-option>
+            <mat-option value="silver">Silver</mat-option>
+            <mat-option value="silver">Silver Plus</mat-option>
+            <mat-option value="gold">Gold</mat-option>
+            <mat-option value="gold">Luxury Gold</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="5" placeholder="Summary" formControlName="summary" required></textarea>
+    </mat-form-field>
+    <mat-form-field>
+            <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="10" placeholder="Description" formControlName="description" required></textarea>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Berths" formControlName="berths" required>
+    </mat-form-field>
+    <label id="images" [class.error]="isLoadImageError">Images</label>
+    <div class="image">
+        <div *ngFor="let image of images">
+            <button mat-mini-fab (click)="deleteImage(image.imagePath)" matTooltip="Delete image"><mat-icon>delete</mat-icon></button>
+            <img src="{{image.imageURL | async}}">
+        </div>
+    </div>
+    <input type="file" (change)="loadImage($event)" [class.error]="isLoadImageError"><br><br>
+    <mat-checkbox formControlName="pets">Pets</mat-checkbox>
+    <mat-checkbox formControlName="smoking">Smoking</mat-checkbox>
+    <div>
+        {{updateError}}<br>
+        <button mat-button type="submit" [disabled]="!caravanForm.valid">Submit</button>
+    </div>
+</form>

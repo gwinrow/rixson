@@ -1,4 +1,4 @@
-<div class="mat-typography">
+<div>
   <mat-toolbar color="accent">
     <button mat-button routerLink="/"><h1>Rixson Leisure</h1></button>
     
@@ -9,8 +9,9 @@
       <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
       <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
       <ng-container *ngIf="loggedIn || adminCookie">
-        <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
         <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">settings</i></button>
+        <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">power_settings_new</i></button>
+        <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
         <button *ngIf="loggedIn" mat-icon-button matTooltip="Logoff" (click)="logoff()"><i class="material-icons">power_settings_new</i></button>  
       </ng-container>
     </span>
@@ -25,20 +26,15 @@
     <button mat-icon-button matTooltip="About us" routerLink="/about"><i class="material-icons">help</i></button>
     <button mat-icon-button matTooltip="Find us" routerLink="/contact"><i class="material-icons">place</i></button>
     <ng-container *ngIf="loggedIn || adminCookie">
-      <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
       <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">settings</i></button>
+      <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><i class="material-icons">power_settings_new</i></button>
+      <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><i class="material-icons">settings</i></button>
       <button *ngIf="loggedIn" mat-icon-button matTooltip="Logoff" (click)="logoff()"><i class="material-icons">power_settings_new</i></button>  
     </ng-container>
   </mat-menu>
   <div id="content" class="mat-app-background" [ngClass]="largeClass">
   <router-outlet></router-outlet>
   </div>
-  
-<!--   <span class="done">
-    <button mat-fab>
-      <mat-icon>check circle</mat-icon>
-    </button>
-  </span> -->
     <footer class="mat-toolbar mat-accent">
       <div>
         Rixson Leisure Holidays, 

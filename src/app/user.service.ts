@@ -7,10 +7,11 @@ import { User } from './user';
   providedIn: 'root'
 })
 export class UserService {
-  private usersCollection: AngularFirestoreCollection<User>;
-  users: Observable<User[]>;
+
+  getUser(email: string): Observable<User[]> {
+    return this.afs.collection<User>('users', ref => ref.where('email', '==', email)).valueChanges();
+  }
   constructor(private afs: AngularFirestore) {
-    this.usersCollection = afs.collection<User>('users');
-    this.users = this.usersCollection.valueChanges();
+
   }
 }
