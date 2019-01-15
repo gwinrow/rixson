@@ -17,7 +17,7 @@
 	<h1>Our caravans</h1>
 	<mat-grid-list [cols]="getCols()" rowHeight="2:1" gutterSize="20px">
 		<mat-grid-tile routerLink="/view-caravan/{{caravan.id}}" *ngFor="let caravan of caravans" 
-		[ngStyle]="{'background': 'url('+caravan.imageRefs[0]+') center/100% no-repeat'}">
+		[ngStyle]="{'background': 'url('+caravan.imageUrls[0]+') center/100% no-repeat'}">
 			<mat-grid-tile-header>{{caravan.name}}</mat-grid-tile-header>
 			
 			<mat-grid-tile-footer >

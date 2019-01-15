@@ -1,9 +1,13 @@
 <h1>Caravans</h1>
 <a mat-button routerLink="/admin">Dashboard</a> <br>
 <mat-card *ngFor="let caravan of caravans">
-  <h3>{{caravan.name}}</h3>
-  <p>{{caravan.summary}}</p>
-  <a routerLink="/admin/edit-caravan/{{caravan.id}}">update details</a>
+  <div>
+    <h3>{{caravan.name}}</h3>
+    <p>{{caravan.summary}}</p>
+    <a mat-button routerLink="/admin/edit-caravan/{{caravan.id}}">update</a>
+    <a mat-button routerLink="/admin/edit-bookings/{{caravan.id}}">bookings</a>
+    <a mat-button (click)="deleteCaravan(caravan.id)">delete</a>
+  </div>
 </mat-card>
 <span class="done">
   <button mat-fab routerLink="/admin/new-caravan">

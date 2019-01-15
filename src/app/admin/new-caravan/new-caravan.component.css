@@ -13,7 +13,7 @@ input[type=file].error {
 label#images {
     color: rgba(0,0,0,.6);
 }
-label#images.error {
+label#images.error, span.error {
     color: red;
 }
 mat-form-field {

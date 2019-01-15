@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { AngularFireStorageModule } from '@angular/fire/storage';
-
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +23,6 @@ import { NewCaravanComponent } from './new-caravan/new-caravan.component';
     CommonModule,
     ReactiveFormsModule,
     AdminRoutingModule,
-    AngularFireStorageModule,
     MatIconModule,
     MatCardModule,
     MatButtonModule,

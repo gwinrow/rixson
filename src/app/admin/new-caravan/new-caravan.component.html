@@ -36,7 +36,7 @@
     <mat-checkbox formControlName="pets">Pets</mat-checkbox>
     <mat-checkbox formControlName="smoking">Smoking</mat-checkbox>
     <div>
-        <span class="error" *ngIf="updateError">{{'ERROR - ' + updateError}}</span>
+        <span class="error" *ngIf="updateError"><br>{{updateError}}</span>
         <br>
         <button mat-button type="submit" [disabled]="!caravanForm.valid">Submit</button>
     </div>

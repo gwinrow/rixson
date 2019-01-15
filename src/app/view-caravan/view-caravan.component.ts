@@ -48,11 +48,11 @@ export class ViewCaravanComponent implements OnInit {
       }
     ];
     this.galleryImages = new Array();
-    for (let i = 0; i < this.caravan.imageRefs.length; i++) {
+    for (let i = 0; i < this.caravan.imageUrls.length; i++) {
       this.galleryImages[i] = {
-        small: this.caravan.imageRefs[i],
-        medium: this.caravan.imageRefs[i],
-        big: this.caravan.imageRefs[i]
+        small: this.caravan.imageUrls[i],
+        medium: this.caravan.imageUrls[i],
+        big: this.caravan.imageUrls[i]
       };
     }
 
@@ -65,7 +65,7 @@ export class ViewCaravanComponent implements OnInit {
       this.service.getCaravans().subscribe((caravans: Caravan[]) => {
         this.caravans = caravans;
         for (let i = 0; i < caravans.length; i++) {
-          if (this.caravans[i].id === +id) {
+          if (this.caravans[i].id === id) {
             this.caravan = this.caravans[i];
             if (i > 0) {
               this.prevCaravan = this.caravans[i - 1];

@@ -19,7 +19,7 @@ export class BookingService {
       );
   }
 
-  getCaravanBookings(caravanId: number): Observable<Booking[]> {
+  getCaravanBookings(caravanId: string): Observable<Booking[]> {
     return this.http.get<Booking[]>(this.bookingsUrl).pipe(
       map((bookings: Booking[]) => bookings.filter(booking => booking.caravan.id === caravanId)),
       tap(bookings => this.log('fetched bookings')),

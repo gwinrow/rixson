@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Observable, forkJoin } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { AngularFirestore,
-          AngularFirestoreCollection,
-          DocumentReference } from '@angular/fire/firestore';
+          AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Router } from '@angular/router';
 import { Caravan } from '../../caravan';
@@ -26,8 +27,7 @@ export class NewCaravanComponent implements OnInit {
     description: ['', Validators.required],
     berths: [1, Validators.required],
     pets: [false, Validators.required],
-    smoking: [false, Validators.required],
-    imageRefs: this.fb.array([])
+    smoking: [false, Validators.required]
   });
   count = 0;
   images = new Array<{ id: number, imageURL: SafeResourceUrl, imageFile: any }>();
@@ -50,28 +50,40 @@ export class NewCaravanComponent implements OnInit {
     this.images.splice(this.images.findIndex(img => img.id === id));
   }
   onSubmit() {
+    this.updateError = '';
+    const caravan = new Caravan(this.caravanForm.value);
     if (this.caravanForm.valid) {
       const _that = this;
+      const tasks = new Array<Observable<firebase.storage.UploadTaskSnapshot>>();
+      const urls = new Array<Observable<string>>();
       this.images.forEach(function(image) {
         const imagePath = 'caravans/' + _that.caravanForm.get('name').value + '-' + image.id;
         const imageRef = _that.storage.ref(imagePath);
-        imageRef.put(image.imageFile);
-        const formImageRefs = _that.caravanForm.get('imageRefs') as FormArray;
-        formImageRefs.push(_that.fb.control(imagePath));
+        const task = imageRef.put(image.imageFile);
+        tasks.push(task.snapshotChanges().pipe(
+          // finalize was only being called for some of the uploaded files.
+          finalize(() => null)
+        ));
+        caravan.imageRefs.push(imagePath);
       });
-      const caravan = new Caravan(this.caravanForm.value);
-      this.caravansCollection = this.afs.collection<Caravan>('caravans');
-      this.caravansCollection.add({...caravan}).
-        then((docRef: DocumentReference) => {
-          if (docRef) {
-            this.router.navigate(['/admin/caravans']);
-          } else {
-            this.updateError = 'Failed to save caravan. Please try again.';
-          }
-        }).
-        catch(() => {
-          this.updateError = 'Failed to save caravan. Please try again.';
+      forkJoin(tasks).subscribe((taskArray) => {
+        // All images should have been uploaded now so create array of observable urls for them.
+        caravan.imageRefs.forEach(function(ref) {
+          const imageRef = _that.storage.ref(ref);
+          urls.push(imageRef.getDownloadURL());
         });
+        forkJoin(urls).subscribe(urlArray => {
+          urlArray.forEach(function(url) {
+            caravan.imageUrls.push(url);
+          });
+          _that.caravansCollection = _that.afs.collection<Caravan>('caravans');
+          caravan.id = _that.afs.createId();
+          caravan.createdDate = (new Date()).toJSON();
+          _that.caravansCollection.doc(caravan.id).set({...caravan});
+          _that.router.navigate(['/admin/caravans']);
+        },
+        err => {_that.updateError = 'Error saving data, please try again.'; });
+      });
     } else {
       this.updateError = 'Invalid form. Please check all required fields have been entered correctly.';
     }

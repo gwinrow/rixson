@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Caravan } from '../caravan';
 import { CaravanService } from '../caravan.service';
 import { BreakPointsService } from '../break-points.service';
@@ -44,6 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
   constructor(private caravanService: CaravanService,
-    private bpService: BreakPointsService) { }
+    private bpService: BreakPointsService,
+    private storage: AngularFireStorage) { }
 
 }
