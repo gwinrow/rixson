@@ -13,6 +13,6 @@
     <ng-container *ngIf="caravan.pets"><i class="material-icons"matTooltip="pets are allowed" matTooltipPosition="above">pets</i></ng-container>
   </p>  
   <h2>{{caravan.summary}}</h2>
-  <p>{{caravan.description}}</p>
+  <markdown [data]="caravan.description"></markdown>
   <app-calendar [caravan]="caravan"></app-calendar>
 </div>

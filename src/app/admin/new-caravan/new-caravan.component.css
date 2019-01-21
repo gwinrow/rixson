@@ -10,7 +10,12 @@ input[type=file] {
 input[type=file].error {
     border-bottom: 1px solid red;
 }
-label#images {
+div.previewDesc {
+    margin: 0 0 20px 0;
+    padding: 0 10px 0 10px;
+    border: 1px dashed lightgrey;
+}
+label#images, label.previewDesc {
     color: rgba(0,0,0,.6);
 }
 label#images.error, span.error {
@@ -53,4 +58,7 @@ button {
     z-index: 10;
     left: 290px;
     top: 10px;
+}
+a#mdHelpLink {
+    font-size: smaller;
 }

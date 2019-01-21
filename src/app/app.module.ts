@@ -30,6 +30,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatRippleModule } from '@angular/material/core';
 
+import { MarkdownModule } from 'ngx-markdown';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -76,6 +77,7 @@ import { MonthComponent } from './calendar/month/month.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     BrowserAnimationsModule,
+    MarkdownModule.forRoot(),
     NgxGalleryModule,
     MatButtonModule,
     MatMenuModule,
