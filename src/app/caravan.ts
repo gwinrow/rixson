@@ -10,7 +10,9 @@ export class Caravan {
     berths: number;
     pets: boolean;
     smoking: boolean;
+    hide: boolean;
     createdDate: string;
+    order: number;
     public constructor(init?: Partial<Caravan>) {
         Object.assign(this, init);
     }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { SafeResourceUrl } from '@angular/platform-browser';
 import { Caravan } from './caravan';
 import { Observable, forkJoin } from 'rxjs';
-import { last } from 'rxjs/operators';
+import { last, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -11,11 +11,11 @@ import { AngularFireStorage } from '@angular/fire/storage';
 })
 export class CaravanService {
 
-  COL = 'caravans';
-  COL_PATH = this.COL + '/';
+  COLLECTION = 'caravans';
+  COLLECTION_PATH = this.COLLECTION + '/';
 
   getImagePath(caravan: Caravan) {
-    return this.COL_PATH + caravan.id + '/' + caravan.name + '-' + caravan.imageRefs.length;
+    return this.COLLECTION_PATH + caravan.id + '/' + caravan.name + '-' + caravan.imageRefs.length;
   }
 
   addImage(caravan: Caravan, imageFile: any) {
@@ -29,29 +29,38 @@ export class CaravanService {
       imageRef.getDownloadURL().subscribe(url => {
         caravan.imageUrls.push(url);
         const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
-        _that.afs.doc<Caravan>(_that.COL_PATH + caravan.id).update(data);
+        _that.afs.doc<Caravan>(_that.COLLECTION_PATH + caravan.id).update(data);
       });
     });
   }
-
+  moveImageUp(caravan: Caravan, index: number) {
+    const imageRef = caravan.imageRefs[index];
+    const imageUrl = caravan.imageUrls[index];
+    caravan.imageRefs[index] = caravan.imageRefs[index - 1];
+    caravan.imageUrls[index] = caravan.imageUrls[index - 1];
+    caravan.imageRefs[index - 1] = imageRef;
+    caravan.imageUrls[index - 1] = imageUrl;
+    const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
+    this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
+  }
   deleteImage(caravan: Caravan, index: number) {
     const imagePath = caravan.imageRefs[index];
     caravan.imageRefs.splice(index);
     caravan.imageUrls.splice(index);
     const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
-    this.afs.doc<Caravan>(this.COL_PATH + caravan.id).update(data);
+    this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
     const imageRef = this.storage.ref(imagePath);
     imageRef.delete();
   }
 
   updateCaravan(caravan: Caravan, data: Partial<Caravan>) {
     if (!data.imageRefs && !data.imageUrls) {
-      this.afs.doc<Caravan>(this.COL_PATH + caravan.id).update(data);
+      this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
     }
   }
 
   deleteCaravan(caravan: Caravan) {
-    this.afs.doc<Caravan>(this.COL_PATH + caravan.id).delete();
+    this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).delete();
     const _that = this;
     caravan.imageRefs.forEach(function(ref) {
       const imageRef = _that.storage.ref(ref);
@@ -59,7 +68,7 @@ export class CaravanService {
     });
   }
 
-  newCaravan(caravan: Caravan, images: { id: number, imageURL: SafeResourceUrl, imageFile: any }[]): Observable<string> {
+  newCaravan(caravan: Caravan, images: { imageURL: SafeResourceUrl, imageFile: any }[]): Observable<string> {
     return  new Observable(observer => {
       const _that = this;
       const tasks = new Array<Observable<firebase.storage.UploadTaskSnapshot>>();
@@ -95,7 +104,9 @@ export class CaravanService {
 
   /** GET caravans from the server */
   getCaravans (): Observable<Caravan[]> {
-    return this.afs.collection<Caravan>(this.COL).valueChanges();
+    return this.afs.collection<Caravan>(this.COLLECTION).valueChanges().pipe(
+      map(caravans => caravans.sort((a, b) => a.order - b.order))
+    );
   }
 
   constructor(

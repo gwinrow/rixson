@@ -24,13 +24,8 @@ label#images.error {
 mat-form-field {
     width: 100%;
 }
-
 mat-checkbox {
     margin-right: 20px;
-}
-
-button {
-    margin-top: 20px;
 }
 
 .image {
@@ -40,25 +35,34 @@ button {
     border: 1px solid lightgrey;
     border-radius: 2%;
 }
-.image div {
-    margin-bottom: -40px;
+.image div.imageLoad {
+    position: relative;
 }
 .image img {
     width: 100%;
     height: auto;
-    position: relative;
     z-index: 1;
-    top: -50px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
-.image button {
-    margin: 0;
-    position: relative;
+.image button.deleteImage {
+    position: absolute;
     z-index: 10;
     left: 290px;
-    top: 10px;
+    top: 20px;
+}
+.image button.moveImage {
+    position: absolute;
+    z-index: 10;
+    left: 10px;
+    top: 20px;
 }
 a#mdHelpLink {
-    font-size: smaller;
+    display: block;
+    text-align: end;
+    font-size: small;
+    color: #ff4081;
+}
+div.hideCaravan {
+    margin: 10px;
 }

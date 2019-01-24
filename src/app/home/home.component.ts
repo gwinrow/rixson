@@ -5,6 +5,7 @@ import { CaravanService } from '../caravan.service';
 import { BreakPointsService } from '../break-points.service';
 import { ScreenSize } from '../screen-size.enum';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCaravans(): void {
-    this.caravanService.getCaravans().subscribe(caravans => this.caravans = caravans);
+    this.caravanService.getCaravans().pipe(
+      map(caravans => caravans.filter(caravan => caravan.hide === false))
+    ).subscribe(caravans => this.caravans = caravans);
   }
 
   getScreenSize(): void {

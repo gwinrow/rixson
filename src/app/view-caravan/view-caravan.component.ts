@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CaravanService } from '../caravan.service';
 import { Caravan } from '../caravan';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
@@ -62,7 +62,9 @@ export class ViewCaravanComponent implements OnInit {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
-      this.service.getCaravans().subscribe((caravans: Caravan[]) => {
+      this.service.getCaravans().pipe(
+        map(caravans => caravans.filter(caravan => caravan.hide === false))
+      ).subscribe((caravans: Caravan[]) => {
         this.caravans = caravans;
         for (let i = 0; i < caravans.length; i++) {
           if (this.caravans[i].id === id) {

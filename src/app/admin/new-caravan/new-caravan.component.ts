@@ -16,17 +16,18 @@ export class NewCaravanComponent implements OnInit {
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
   caravanForm = this.fb.group({
+    hide: [false, Validators.required],
     name: ['', Validators.required],
     grade: ['bronze', Validators.required],
     summary: ['', Validators.required],
     description: ['', Validators.required],
     berths: [1, Validators.required],
+    order: [1, Validators.required],
     pets: [false, Validators.required],
     smoking: [false, Validators.required]
   });
 
-  count = 0;
-  images = new Array<{ id: number, imageURL: SafeResourceUrl, imageFile: any }>();
+  images = new Array<ImageLoad>();
   updateError = '';
   isLoadImageError = false;
   showSpinner = false;
@@ -37,7 +38,10 @@ export class NewCaravanComponent implements OnInit {
     const imageok = ImageTools.resize(event.target.files[0], { width: 800, height: 600 }, function(image, resized) {
       const url = URL.createObjectURL(image);
       const srcData: SafeResourceUrl = _that.sanitizer.bypassSecurityTrustResourceUrl(url);
-      _that.images.push({ 'id': _that.count++, 'imageURL': srcData, 'imageFile': image });
+      const imageLoad = new ImageLoad();
+      imageLoad.imageURL = srcData;
+      imageLoad.imageFile = image;
+      _that.images.push(imageLoad);
     });
     if (!imageok) {
       this.isLoadImageError = true;
@@ -45,10 +49,14 @@ export class NewCaravanComponent implements OnInit {
     event.target.value = '';
   }
 
-  deleteImage(id: number) {
-    this.images.splice(this.images.findIndex(img => img.id === id));
+  moveImageUp(index: number) {
+    const temp: ImageLoad = this.images[index];
+    this.images[index] = this.images[index - 1];
+    this.images[index - 1] = temp;
   }
-
+  deleteImage(index: number) {
+    this.images.splice(index);
+  }
   onSubmit() {
     this.updateError = '';
     if (this.caravanForm.valid) {
@@ -77,3 +85,4 @@ export class NewCaravanComponent implements OnInit {
   }
 
 }
+class ImageLoad { imageURL: SafeResourceUrl; imageFile: any; }

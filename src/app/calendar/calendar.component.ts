@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, OnChanges } from '@angular/core';
 import { BreakPointsService } from '../break-points.service';
 import { ScreenSize } from '../screen-size.enum';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { BookingService } from '../booking.service';
 import { Booking } from '../booking';
 import { Caravan } from '../caravan';
@@ -54,18 +55,17 @@ export class CalendarComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.getScreenSize();
-    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id)
-      .subscribe((bookings: Booking[]) => this.bookings = bookings);
+    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id).pipe(
+      map(bookings => bookings.filter(booking => booking.cancelled === false))
+    ).subscribe((bookings: Booking[]) => this.bookings = bookings);
   }
 
   ngOnChanges(changes: any): void {
     this.currentOffset = 0;
     this.setMonthOffsets();
-    if (this.subs !== undefined) {
-      this.subsBooking.unsubscribe();
-    }
-    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id)
-      .subscribe((bookings: Booking[]) => this.bookings = bookings);
+    this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id).pipe(
+      map(bookings => bookings.filter(booking => booking.cancelled === false))
+    ).subscribe((bookings: Booking[]) => this.bookings = bookings);
   }
 
   ngOnDestroy() {

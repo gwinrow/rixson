@@ -18,11 +18,13 @@ export class EditCaravanComponent implements OnInit {
   caravan: Caravan;
 
   caravanForm = this.fb.group({
+    hide: [false, Validators.required],
     name: [{value: '', disabled: true}],
     grade: ['bronze', { validators: Validators.required, updateOn: 'blur' }],
     summary: ['', { validators: Validators.required, updateOn: 'blur' }],
     description: ['', { validators: Validators.required, updateOn: 'blur' }],
     berths: [1, { validators: Validators.required, updateOn: 'blur' }],
+    order: [1, { validators: Validators.required, updateOn: 'blur' }],
     pets: [false, Validators.required],
     smoking: [false, Validators.required]
   });
@@ -40,7 +42,9 @@ export class EditCaravanComponent implements OnInit {
     }
     event.target.value = '';
   }
-
+  moveImageUp(index: number) {
+    this.service.moveImageUp(this.caravan, index);
+  }
   deleteImage(index: number) {
     this.service.deleteImage(this.caravan, index);
   }
@@ -50,6 +54,9 @@ export class EditCaravanComponent implements OnInit {
     }
   }
   handleFormChanges() {
+    this.hide.valueChanges.subscribe(
+      data => this.update(this.hide, { 'hide': data })
+    );
     this.grade.valueChanges.subscribe(
       data => this.update(this.grade, { 'grade': data })
     );
@@ -62,12 +69,18 @@ export class EditCaravanComponent implements OnInit {
     this.berths.valueChanges.subscribe(
       data => this.update(this.berths, { 'berths': data })
     );
+    this.order.valueChanges.subscribe(
+      data => this.update(this.order, { 'order': data })
+    );
     this.pets.valueChanges.subscribe(
       data => this.update(this.pets, { 'pets': data })
     );
     this.smoking.valueChanges.subscribe(
       data => this.update(this.smoking, { 'smoking': data })
     );
+  }
+  get hide(): AbstractControl {
+    return this.caravanForm.get('hide');
   }
   get grade(): AbstractControl {
     return this.caravanForm.get('grade');
@@ -80,6 +93,9 @@ export class EditCaravanComponent implements OnInit {
   }
   get berths() {
     return this.caravanForm.get('berths');
+  }
+  get order() {
+    return this.caravanForm.get('order');
   }
   get pets() {
     return this.caravanForm.get('pets');

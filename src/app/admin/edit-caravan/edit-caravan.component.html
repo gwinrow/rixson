@@ -1,6 +1,9 @@
 <h1>Edit details</h1>
 <a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/caravans">Caravans</a>
 <form [formGroup]="caravanForm" (ngSubmit)="onSubmit()">
+    <div class="hideCaravan">
+        <mat-slide-toggle color="primary" formControlName="hide">Hide</mat-slide-toggle>
+    </div>
     <mat-form-field>
         <input matInput placeholder="Name" formControlName="name">
     </mat-form-field>
@@ -22,17 +25,21 @@
         cdkAutosizeMaxRows="10" placeholder="Description" formControlName="description" required></textarea>
     </mat-form-field>
     <br><br>
-    <label class="previewDesc">Preview description</label> <a id="mdHelpLink" target="_blank" mat-button color="accent" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
+    <label class="previewDesc">Preview description</label> <a id="mdHelpLink" target="_blank" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
     <div class="previewDesc">
         <markdown [data]="desc.value"></markdown>
     </div>
     <mat-form-field>
         <input matInput type="number" placeholder="Berths" formControlName="berths" required>
     </mat-form-field>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Sort order" formControlName="order" required>
+    </mat-form-field>
     <label id="images" [class.error]="isLoadImageError">Images</label>
     <div class="image">
-        <div *ngFor="let imageUrl of caravan?.imageUrls; index as i">
-            <button mat-mini-fab (click)="deleteImage(i)" matTooltip="Delete image"><mat-icon>delete</mat-icon></button>
+        <div class="imageLoad" *ngFor="let imageUrl of caravan?.imageUrls; let i = index">
+            <button mat-mini-fab class="moveImage" *ngIf="i !== 0" (click)="moveImageUp(i)" matTooltip="Move image up"><mat-icon>arrow_upward</mat-icon></button>
+            <button mat-mini-fab class="deleteImage" (click)="deleteImage(i)" matTooltip="Delete image"><mat-icon>delete</mat-icon></button>
             <img src="{{imageUrl}}">
         </div>
     </div>

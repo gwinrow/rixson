@@ -7,11 +7,14 @@ import { MarkdownModule } from 'ngx-markdown';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TextFieldModule } from '@angular/cdk/text-field';
 
@@ -33,13 +36,24 @@ import { EditBookingComponent } from './edit-booking/edit-booking.component';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatSlideToggleModule,
+    DragDropModule,
     TextFieldModule
   ],
-  declarations: [DashboardComponent, CaravansComponent, EditCaravanComponent, NewCaravanComponent, BookingsComponent, NewBookingComponent, EditBookingComponent]
+  declarations: [
+    DashboardComponent,
+    CaravansComponent,
+    EditCaravanComponent,
+    NewCaravanComponent,
+    BookingsComponent,
+    NewBookingComponent,
+    EditBookingComponent
+  ]
 })
 export class AdminModule { }
