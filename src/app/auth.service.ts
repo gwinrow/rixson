@@ -16,18 +16,16 @@ export class AuthService {
     this.user = af.authState;
   }
 
-  signInWithGoogle() {
-    from(this.af.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())).subscribe(res => {
-      this.userService.getUser(res.user.email).subscribe((users: User[]) => {
-        let userFound = false;
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].email === res.user.email) {
-            userFound = true;
-          }
-        }
-        if (!userFound) {
-          this.logoff();
-        }
+  signInWithGoogle(): Observable<string> {
+    const _that = this;
+    return new Observable<string>(observer => {
+      from(this.af.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())).subscribe(res => {
+          const user = new User();
+          user.uid = res.user.uid;
+          user.email = res.user.email;
+          user.lastLoginDate = (new Date()).toJSON();
+          _that.userService.updateUser(user);
+          observer.next('SUCCESS');
       });
     });
   }

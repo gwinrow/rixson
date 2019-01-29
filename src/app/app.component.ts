@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router, NavigationEnd } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnChanges, OnDestroy {
-  title = 'rixson';
+  title = 'Rixson Leisure';
   size = ScreenSize.MEDIUM;
   screenSize = ScreenSize;
   subs: Subscription;
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   loggedIn = false;
 
   login() {
-    this.auth.signInWithGoogle();
+    this.auth.signInWithGoogle().subscribe(x => console.log(x));
   }
   logoff() {
     this.auth.logoff();
@@ -43,7 +44,14 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
     this.getScreenSize();
     this.auth.user.subscribe(user => {
       if (user) {
-        this.loggedIn = true;
+        this.userService.getUser(user.uid).subscribe(foundUser => {
+            if (foundUser && foundUser.role && foundUser.role === 'ADMIN') {
+              this.loggedIn = true;
+            } else {
+              this.loggedIn = false;
+            }
+          }
+        );
       } else {
         this.loggedIn = false;
       }
@@ -54,13 +62,6 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
   ngOnChanges() {
     this.getScreenSize();
-    this.auth.user.subscribe(user => {
-      if (user) {
-        this.loggedIn = true;
-      } else {
-        this.loggedIn = false;
-      }
-    });
   }
   ngOnDestroy() {
     if (this.subs !== undefined) {
@@ -69,6 +70,7 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
   constructor(private bpService: BreakPointsService,
       private auth: AuthService,
+      private userService: UserService,
       private cookieService: CookieService,
       private router: Router) {}
 }
