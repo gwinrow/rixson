@@ -6,8 +6,8 @@
       <p>{{caravan.summary}}</p>
       <div id="buttons">
         <a mat-button routerLink="/admin/edit-caravan/{{caravan.id}}">update</a>
-        <a mat-button routerLink="/admin/edit-bookings/{{caravan.id}}">bookings</a>
-        <a mat-button (click)="deleteCaravan(caravan.id)">delete</a>
+        <a mat-button routerLink="/admin/bookings/{{caravan.id}}">bookings</a>
+        <a mat-button (click)="deleteCaravan(caravan)">delete</a>
       </div>
   </mat-card>
 </div>

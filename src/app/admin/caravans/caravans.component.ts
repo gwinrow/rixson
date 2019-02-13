@@ -13,9 +13,8 @@ export class CaravansComponent implements OnInit {
   getCaravans(): void {
     this.caravanService.getCaravans().subscribe(caravans => this.caravans = caravans);
   }
-  deleteCaravan(id: string) {
-    this.caravanService.deleteCaravan(this.caravans[this.caravans.findIndex(caravan => caravan.id === id)]);
-    this.caravans.splice(this.caravans.findIndex(caravan => caravan.id === id));
+  deleteCaravan(caravan: Caravan) {
+    this.caravanService.deleteCaravan(caravan);
   }
   constructor(private caravanService: CaravanService) { }
 

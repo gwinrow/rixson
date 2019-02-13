@@ -91,7 +91,7 @@ export class CaravanService {
           urlArray.forEach(function(url) {
             caravan.imageUrls.push(url);
           });
-          const caravansCollection = _that.afs.collection<Caravan>('caravans');
+          const caravansCollection = _that.afs.collection<Caravan>(this.COLLECTION);
           caravan.createdDate = (new Date()).toJSON();
           caravansCollection.doc(caravan.id).set({...caravan});
           observer.next('SUCCESS');
@@ -103,10 +103,14 @@ export class CaravanService {
   }
 
   /** GET caravans from the server */
-  getCaravans (): Observable<Caravan[]> {
+  getCaravans(): Observable<Caravan[]> {
     return this.afs.collection<Caravan>(this.COLLECTION).valueChanges().pipe(
       map(caravans => caravans.sort((a, b) => a.order - b.order))
     );
+  }
+
+  getCaravan(caravanId): Observable<Caravan> {
+    return this.afs.doc<Caravan>(this.COLLECTION_PATH + caravanId).valueChanges();
   }
 
   constructor(

@@ -1,0 +1,30 @@
+div.slider {
+    margin: 10px;
+}
+form mat-form-field, div.previewNote, div.previewNoteLabel {
+    display: block;
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+div.previewNote {
+    margin: 0 0 20px 0;
+    border: 1px dashed lightgrey;
+}
+label.previewNote {
+    color: rgba(0,0,0,.6);
+}
+span.error {
+    color: red;
+}
+a#mdHelpLink {
+    float: right;
+    text-align: end;
+    font-size: small;
+    color: #ff4081;
+}
+div.subForm {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid lightgrey;
+}

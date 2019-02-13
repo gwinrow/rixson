@@ -92,6 +92,16 @@ export class Calmonth {
                     const calDay = this.monthdays[i];
                     calDay.class = 'booked';
                 }
+            } else {
+                const checkinMonths = checkin.getFullYear() * 12 + checkin.getMonth();
+                const checkoutMonths = checkout.getFullYear() * 12 + checkout.getMonth();
+                const calMonths = calDate.getFullYear() * 12 + calDate.getMonth();
+                if (calMonths > checkinMonths && calMonths < checkoutMonths) {
+                    for (let i = 0; i < this.monthdays.length; i++) {
+                        const calDay = this.monthdays[i];
+                        calDay.class = 'booked';
+                    }
+                }
             }
         }
     }

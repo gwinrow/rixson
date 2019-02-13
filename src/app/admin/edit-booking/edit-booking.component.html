@@ -1,3 +1,51 @@
-<p>
-  edit-booking works!
-</p>
+<h1>Edit Booking</h1>
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a><br>
+<form [formGroup]="bookingForm">
+    <div class="slider">
+        <mat-slide-toggle color="primary" formControlName="cancelled">Cancelled</mat-slide-toggle>
+    </div>
+    <div class="slider">
+        <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>
+    </div>
+    <ng-container *ngIf="caravans">
+        <mat-form-field>
+            <mat-select placeholder="Caravan" formControlName="caravanId">
+                <mat-option *ngFor="let van of caravans" [value]="van.id">{{van.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+    <mat-form-field>
+        <mat-select placeholder="Customer" formControlName="customerId">
+            <mat-option *ngFor="let customer of customers" [value]="customer.id">{{customer.firstName}} {{customer.secondName}}</mat-option>
+        </mat-select>
+    </mat-form-field>    
+    <ng-container formGroupName="dates">
+        <mat-form-field>
+            <input matInput [matDatepicker]="pickerFrom" placeholder="From date" formControlName="dateFrom">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="pickerTo" placeholder="To date" formControlName="dateTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo [startAt]="dateFrom.value"></mat-datepicker>
+        </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="selectedVan">
+        <app-calendar [caravan]="selectedVan"></app-calendar>
+    </ng-container>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Price" formControlName="price">
+    </mat-form-field>
+    <mat-form-field hintLabel="Use markdown formatting.">
+        <textarea matInput cdkTextareaAutosize #note #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="10" placeholder="Notes" formControlName="notes"></textarea>
+    </mat-form-field>
+    <br><br>
+    <div class="previewNoteLabel">
+        <label>Preview notes</label> <a id="mdHelpLink" target="_blank" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
+    </div>
+    <div class="previewNote">
+        <markdown [data]="note.value"></markdown>
+    </div>
+</form>

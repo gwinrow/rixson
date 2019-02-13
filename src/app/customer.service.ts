@@ -1,39 +1,34 @@
 import { Injectable } from '@angular/core';
 import { Customer } from './customer';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
-  private customersUrl = 'api/customers';  // URL to web api
+  COLLECTION = 'customers';
+  COLLECTION_PATH = this.COLLECTION + '/';
 
-  /** GET customers from the server */
   getCustomers (): Observable<Customer[]> {
-    return this.http.get<Customer[]>(this.customersUrl)
-      .pipe(
-        tap(customers => this.log('fetched customers')),
-        catchError(this.handleError('getCustomers', []))
-      );
-  }
-
-  /** GET customer by id. Will 404 if id not found */
-  getCustomer(id: number): Observable<Customer> {
-    const url = `${this.customersUrl}/${id}`;
-    return this.http.get<Customer>(url).pipe(
-      tap(_ => this.log(`fetched customer id=${id}`)),
-      catchError(this.handleError<Customer>(`getCustomer id=${id}`))
+    return this.afs.collection<Customer>(this.COLLECTION).valueChanges().pipe(
+      catchError(this.handleError('getCustomers', []))
     );
   }
 
-  /** Log a HeroService message with the MessageService */
-  private log(message: string) {
-    console.log(message);
-//    this.messageService.add(`CustomerService: ${message}`);
+  getCustomer(customerId: string): Observable<Customer> {
+    return this.afs.doc<Customer>(this.COLLECTION_PATH + customerId).valueChanges().pipe(
+      catchError(this.handleError('getCustomer', null))
+    );
   }
 
+  newCustomer(customer: Customer) {
+    const customersCollection = this.afs.collection<Customer>(this.COLLECTION);
+    customer.id = this.afs.createId();
+    customer.createdDate = (new Date()).toJSON();
+    customersCollection.doc(customer.id).set({...customer});
+  }
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -46,13 +41,10 @@ export class CustomerService {
       // TODO: send the error to remote logging infrastructure
       console.error(error); // log to console instead
 
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
   constructor(
-    private http: HttpClient) { }
+    private afs: AngularFirestore) { }
 }

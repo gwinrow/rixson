@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MarkdownModule } from 'ngx-markdown';
 
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,9 +15,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TextFieldModule } from '@angular/cdk/text-field';
+
+import { ShareModule } from '../share.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -26,6 +31,9 @@ import { NewCaravanComponent } from './new-caravan/new-caravan.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { EditBookingComponent } from './edit-booking/edit-booking.component';
+import { CustomersComponent } from './customers/customers.component';
+import { NewCustomerComponent } from './new-customer/new-customer.component';
+import { EditCustomerComponent } from './edit-customer/edit-customer.component';
 
 @NgModule({
   imports: [
@@ -33,6 +41,7 @@ import { EditBookingComponent } from './edit-booking/edit-booking.component';
     ReactiveFormsModule,
     MarkdownModule.forRoot(),
     AdminRoutingModule,
+    ShareModule,
     MatIconModule,
     MatCardModule,
     MatButtonModule,
@@ -43,6 +52,8 @@ import { EditBookingComponent } from './edit-booking/edit-booking.component';
     MatSelectModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
+    MatDatepickerModule,
+    MatMomentDateModule,
     DragDropModule,
     TextFieldModule
   ],
@@ -53,7 +64,13 @@ import { EditBookingComponent } from './edit-booking/edit-booking.component';
     NewCaravanComponent,
     BookingsComponent,
     NewBookingComponent,
-    EditBookingComponent
-  ]
+    EditBookingComponent,
+    CustomersComponent,
+    NewCustomerComponent,
+    EditCustomerComponent
+  ],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+  ],
 })
 export class AdminModule { }

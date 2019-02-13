@@ -4,8 +4,8 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
 import { Caravan } from '../../caravan';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Subject, of } from 'rxjs';
-import { switchMap, debounceTime } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { ImageTools } from '../image-tools';
 
 @Component({

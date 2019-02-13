@@ -5,7 +5,7 @@
         <mat-slide-toggle color="primary" formControlName="hide">Hide</mat-slide-toggle>
     </div>
     <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name" required>
+        <input matInput placeholder="Name" formControlName="name">
     </mat-form-field>
     <mat-form-field>
         <mat-select placeholder="Grade" formControlName="grade">
@@ -18,11 +18,11 @@
     </mat-form-field>
     <mat-form-field>
         <textarea matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
-        cdkAutosizeMaxRows="5" placeholder="Summary" formControlName="summary" required></textarea>
+        cdkAutosizeMaxRows="5" placeholder="Summary" formControlName="summary"></textarea>
     </mat-form-field>
     <mat-form-field hintLabel="Use markdown formatting.">
         <textarea matInput cdkTextareaAutosize #desc #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
-        cdkAutosizeMaxRows="10" placeholder="Description" formControlName="description" required></textarea>
+        cdkAutosizeMaxRows="10" placeholder="Description" formControlName="description"></textarea>
     </mat-form-field>
     <br><br>
     <label class="previewDesc">Preview description</label> <a id="mdHelpLink" target="_blank" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
@@ -30,10 +30,10 @@
         <markdown [data]="desc.value"></markdown>
     </div>
     <mat-form-field>
-        <input matInput type="number" placeholder="Berths" formControlName="berths" required>
+        <input matInput type="number" placeholder="Berths" formControlName="berths">
     </mat-form-field>
     <mat-form-field>
-        <input matInput type="number" placeholder="Sort order" formControlName="order" required>
+        <input matInput type="number" placeholder="Sort order" formControlName="order">
     </mat-form-field>
     <label id="images" [class.error]="isLoadImageError">Images</label>
     <div class="image">

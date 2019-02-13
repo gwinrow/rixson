@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Booking } from './booking';
-import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -9,21 +8,78 @@ import { AngularFirestore } from '@angular/fire/firestore';
   providedIn: 'root'
 })
 export class BookingService {
-  COLLECTION = 'caravans';
-
-  getBookings (): Observable<Booking[]> {
+  COLLECTION = 'bookings';
+  COLLECTION_PATH = this.COLLECTION + '/';
+  getBooking(bookingId): Observable<Booking> {
+    return this.afs.doc<Booking>(this.COLLECTION_PATH + bookingId).valueChanges();
+  }
+  getBookings(): Observable<Booking[]> {
+    const nowmillis = Date.now();
     return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
+      map((bookings: Booking[]) => bookings.filter(booking => {
+        const dateTo = new Date(booking.dateTo);
+        return dateTo.getTime() > nowmillis;
+        })
+      ),
+      map((bookings: Booking[]) => bookings.sort((a, b) => {
+        const adate = new Date(a.dateFrom);
+        const bdate = new Date(b.dateFrom);
+        return adate.getTime() - bdate.getTime();
+        })
+      ),
       catchError(this.handleError('getBookings', []))
     );
   }
 
   getCaravanBookings(caravanId: string): Observable<Booking[]> {
+    const nowmillis = Date.now();
     return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
       map((bookings: Booking[]) => bookings.filter(booking => booking.caravanId === caravanId)),
-      catchError(this.handleError('getBookings', []))
+      map((bookings: Booking[]) => bookings.filter(booking => {
+        const dateTo = new Date(booking.dateTo);
+        return dateTo.getTime() > nowmillis;
+        })
+      ),
+      map((bookings: Booking[]) => bookings.sort((a, b) => {
+        const adate = new Date(a.dateFrom);
+        const bdate = new Date(b.dateFrom);
+        return adate.getTime() - bdate.getTime();
+        })
+      ),
+      catchError(this.handleError('getCaravanBookings', []))
     );
   }
 
+  getCustomerBookings(customerId: string): Observable<Booking[]> {
+    const nowmillis = Date.now();
+    return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
+      map((bookings: Booking[]) => bookings.filter(booking => booking.customerId === customerId)),
+      map((bookings: Booking[]) => bookings.filter(booking => {
+        const dateTo = new Date(booking.dateTo);
+        return dateTo.getTime() > nowmillis;
+        })
+      ),
+      map((bookings: Booking[]) => bookings.sort((a, b) => {
+        const adate = new Date(a.dateFrom);
+        const bdate = new Date(b.dateFrom);
+        return adate.getTime() - bdate.getTime();
+        })
+      ),
+      catchError(this.handleError('getCustomerBookings', []))
+    );
+  }
+  updateBooking(booking: Booking, data: Partial<Booking>) {
+    this.afs.doc<Booking>(this.COLLECTION_PATH + booking.id).update(data);
+  }
+  newBooking(booking: Booking) {
+    const bookingsCollection = this.afs.collection<Booking>(this.COLLECTION);
+    booking.id = this.afs.createId();
+    booking.createdDate = (new Date()).toJSON();
+    bookingsCollection.doc(booking.id).set({...booking});
+  }
+  deleteBooking(booking: Booking) {
+    this.afs.doc<Booking>(this.COLLECTION_PATH + booking.id).delete();
+  }
   /**
    * Handle Http operation that failed.
    * Let the app continue.
@@ -41,6 +97,5 @@ export class BookingService {
     };
   }
   constructor(
-    private afs: AngularFirestore,
-    private http: HttpClient) { }
+    private afs: AngularFirestore) { }
 }

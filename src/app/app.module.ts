@@ -34,6 +34,8 @@ import { MarkdownModule } from 'ngx-markdown';
 import { NgxGalleryModule } from 'ngx-gallery';
 import { CookieService } from 'ngx-cookie-service';
 
+import { ShareModule } from './share.module';
+
 import { CaravanService } from './caravan.service';
 import { BookingService } from './booking.service';
 import { CustomerService } from './customer.service';
@@ -47,8 +49,6 @@ import { InfoComponent } from './info/info.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
-import { CalendarComponent } from './calendar/calendar.component';
-import { MonthComponent } from './calendar/month/month.component';
 
 @NgModule({
   declarations: [
@@ -58,9 +58,7 @@ import { MonthComponent } from './calendar/month/month.component';
     InfoComponent,
     AboutComponent,
     ContactComponent,
-    ViewCaravanComponent,
-    CalendarComponent,
-    MonthComponent
+    ViewCaravanComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +75,7 @@ import { MonthComponent } from './calendar/month/month.component';
     AngularFireAuthModule,
     AngularFireStorageModule,
     BrowserAnimationsModule,
+    ShareModule,
     MarkdownModule.forRoot(),
     NgxGalleryModule,
     MatButtonModule,
