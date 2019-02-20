@@ -1,3 +1,28 @@
-<p>
-  edit-customer works!
-</p>
+<h1>Edit Customer</h1>
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/customers">Customers</a>
+<form [formGroup]="customerForm">
+  <mat-form-field>
+    <input matInput placeholder="First name" formControlName="firstName">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Last name" formControlName="secondName">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Email" formControlName="email">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Phone" formControlName="phone">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Address" formControlName="addressLine1">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Address" formControlName="addressLine2">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Address" formControlName="addressLine3">
+  </mat-form-field>
+  <mat-form-field>
+      <input matInput placeholder="Postcode" formControlName="postcode">
+  </mat-form-field>
+</form>

@@ -84,6 +84,5 @@
         <br>
         <mat-spinner role="spinner" *ngIf="showSpinner"></mat-spinner>
         <button id="submit" mat-raised-button *ngIf="!showSpinner" color="primary" type="submit" [disabled]="!bookingForm.valid">Submit</button>
-        <button id="button" mat-raised-button *ngIf="!showSpinner" color="primary" type="button" (click)="logit()">Log it...</button>
     </div>
 </form>

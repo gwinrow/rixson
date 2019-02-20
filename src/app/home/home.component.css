@@ -7,8 +7,9 @@ mat-grid-tile {
 mat-grid-tile-footer {
     justify-content: space-between;
 }
-p.contact i {
+p mat-icon {
     font-size: 1em;
+    width: 1em;
 }
 mat-card a {
     font-size: 1em;

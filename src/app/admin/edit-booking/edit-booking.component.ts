@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
 import { CustomerService } from '../../customer.service';
@@ -9,7 +9,7 @@ import { Customer } from '../../customer';
 import { Booking } from '../../booking';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map, first, filter } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -41,12 +41,10 @@ export class EditBookingComponent implements OnInit {
   });
 
   updateError = '';
-  unavailableDatesValidator: ValidatorFn = (control: FormGroup) => {
+  validateBookingDates(bookings: Booking[]): boolean {
     if (!moment.isMoment(this.dateFrom.value) ||
-        !moment.isMoment(this.dateTo.value)) {
-      this.dateFrom.setErrors({unavailableDatesValidator: true});
-      this.dateTo.setErrors({unavailableDatesValidator: true});
-      return {'unavailableDates': {value: control.value}};
+    !moment.isMoment(this.dateTo.value)) {
+      return false;
     }
     const dateFrom: moment.Moment = this.dateFrom.value;
     dateFrom.milliseconds(0);
@@ -59,16 +57,12 @@ export class EditBookingComponent implements OnInit {
     dateTo.minutes(0);
     dateTo.hours(12);
     if (dateTo.isBefore(dateFrom)) {
-      this.dateFrom.setErrors({unavailableDatesValidator: true});
-      this.dateTo.setErrors({unavailableDatesValidator: true});
-      return {'unavailableDates': {value: control.value}};
+      return false;
     }
-    if (!this.bookings) {
-      this.dateFrom.setErrors(null);
-      this.dateTo.setErrors(null);
-      return null;
+    if (!bookings) {
+      return true;
     }
-    const bookingUnavailable = this.bookings.find(booking => {
+    const bookingUnavailable = bookings.find(booking => {
       const bookedStart: moment.Moment = moment(booking.dateFrom);
       const bookedEnd: moment.Moment = moment(booking.dateTo);
       return (dateFrom.isBetween(bookedStart, bookedEnd)) ||
@@ -77,6 +71,12 @@ export class EditBookingComponent implements OnInit {
               (bookedEnd.isBetween(dateFrom, dateTo));
     });
     if (bookingUnavailable) {
+      return false;
+    }
+    return true;
+  }
+  unavailableDatesValidator: ValidatorFn = (control: FormGroup) => {
+    if (!this.validateBookingDates(this.bookings)) {
       this.dateFrom.setErrors({unavailableDatesValidator: true});
       this.dateTo.setErrors({unavailableDatesValidator: true});
       return {'unavailableDates': {value: control.value}};
@@ -85,18 +85,64 @@ export class EditBookingComponent implements OnInit {
     this.dateTo.setErrors(null);
     return null;
   }
+  activationValidator: ValidatorFn = (control: FormGroup) => {
+    if (!control.value) {
+      const newBookings  = Object.assign([], this.bookings);
+      newBookings.push(this.booking);
+      if (!this.validateBookingDates(newBookings)) {
+        return {'unavailableDates': {value: control.value}};
+      }
+    }
+    return null;
+  }
+  caravanValidator: AsyncValidatorFn = (control: AbstractControl) => {
+    // this service call needs to return something
+    return this.bookingService.getCaravanBookings(control.value).pipe(
+      first(),
+      map(newbookings => {
+        if (!this.cancelled.value && !this.validateBookingDates(newbookings)) {
+          console.log('errororor');
+          return of({'unavailableDates': {value: control.value}});
+        }
+        console.log('NO - errororor');
+        return null;
+        })
+      );
+  }
   update(field: AbstractControl, value: Partial<Booking>) {
+    console.log('update ' + field.dirty + ' - ' + field.status.valueOf() + ' - ' + field.valid);
     if (field.dirty && field.valid) {
+      console.log('updating now');
       this.bookingService.updateBooking(this.booking, value);
+    } else if (field.dirty && field.pending) {
+      field.statusChanges.pipe(
+        filter(status => status !== 'PENDING'),
+        first()
+      ).subscribe(status => {
+          if (field.valid) {
+            console.log('updating now async');
+            this.bookingService.updateBooking(this.booking, value);
+          } else {
+            console.log('NOT updating now async - ' + status);
+          }
+        }
+      );
     }
   }
+  getFormValidationErrors() {
+    Object.keys(this.bookingForm.controls).forEach(key => {
+    const controlErrors: ValidationErrors = this.bookingForm.get(key).errors;
+    if (controlErrors != null) {
+          Object.keys(controlErrors).forEach(keyError => {
+            console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+          });
+        }
+      });
+    }
   handleFormChanges() {
-    this.caravanId.valueChanges.subscribe(
-      data => this.update(this.caravanId, { 'caravanId': data })
-    );
-    this.customerId.valueChanges.subscribe(
-      data => this.update(this.customerId, { 'customerId': data })
-    );
+    this.caravanId.valueChanges.subscribe(data => {
+        this.update(this.caravanId, { 'caravanId': data });
+      });
     this.dateFrom.valueChanges.subscribe(
       (data: moment.Moment) => {
         console.log('dateFrom is moment: ' + moment.isMoment(data));
@@ -141,22 +187,22 @@ export class EditBookingComponent implements OnInit {
   get customerId(): AbstractControl {
     return this.bookingForm.get('customerId');
   }
-  get dateFrom() {
+  get dateFrom(): AbstractControl {
     return this.bookingForm.get('dates.dateFrom');
   }
-  get dateTo() {
+  get dateTo(): AbstractControl {
     return this.bookingForm.get('dates.dateTo');
   }
-  get price() {
+  get price(): AbstractControl {
     return this.bookingForm.get('price');
   }
-  get notes() {
+  get notes(): AbstractControl {
     return this.bookingForm.get('notes');
   }
-  get paid() {
+  get paid(): AbstractControl {
     return this.bookingForm.get('paid');
   }
-  get cancelled() {
+  get cancelled(): AbstractControl {
     return this.bookingForm.get('cancelled');
   }
 
@@ -168,6 +214,8 @@ export class EditBookingComponent implements OnInit {
 
   ngOnInit() {
     this.dates.setValidators(this.unavailableDatesValidator);
+    this.caravanId.setAsyncValidators(this.caravanValidator);
+    this.cancelled.setValidators(this.activationValidator);
     this.caravanService.getCaravans().subscribe(caravans => this.caravans = caravans);
     this.customerService.getCustomers().subscribe(customers => this.customers = customers);
     this.route.paramMap.pipe(
@@ -185,9 +233,6 @@ export class EditBookingComponent implements OnInit {
         this.setForm(booking.caravanId);
       });
     });
-    this.caravanId.valueChanges.subscribe(value => {
-      this.setForm(value);
-      });
   }
   setForm(caravanId) {
     if (this.caravans) {

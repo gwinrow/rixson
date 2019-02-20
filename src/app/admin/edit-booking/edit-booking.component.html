@@ -3,6 +3,7 @@
 <form [formGroup]="bookingForm">
     <div class="slider">
         <mat-slide-toggle color="primary" formControlName="cancelled">Cancelled</mat-slide-toggle>
+        <mat-error *ngIf="cancelled.invalid">Check the dates</mat-error>
     </div>
     <div class="slider">
         <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>
@@ -12,6 +13,7 @@
             <mat-select placeholder="Caravan" formControlName="caravanId">
                 <mat-option *ngFor="let van of caravans" [value]="van.id">{{van.name}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="caravanId.invalid">Check the dates</mat-error>
         </mat-form-field>
     </ng-container>
     <mat-form-field>

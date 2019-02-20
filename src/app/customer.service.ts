@@ -22,12 +22,17 @@ export class CustomerService {
       catchError(this.handleError('getCustomer', null))
     );
   }
-
+  updateCustomer(customer: Customer, data: Partial<Customer>) {
+    this.afs.doc<Customer>(this.COLLECTION_PATH + customer.id).update(data);
+  }
   newCustomer(customer: Customer) {
     const customersCollection = this.afs.collection<Customer>(this.COLLECTION);
     customer.id = this.afs.createId();
     customer.createdDate = (new Date()).toJSON();
     customersCollection.doc(customer.id).set({...customer});
+  }
+  deleteCustomer(customer: Customer) {
+    this.afs.doc<Customer>(this.COLLECTION_PATH + customer.id).delete();
   }
   /**
    * Handle Http operation that failed.

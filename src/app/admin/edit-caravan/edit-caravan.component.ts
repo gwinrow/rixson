@@ -85,22 +85,22 @@ export class EditCaravanComponent implements OnInit {
   get grade(): AbstractControl {
     return this.caravanForm.get('grade');
   }
-  get summary() {
+  get summary(): AbstractControl {
     return this.caravanForm.get('summary');
   }
-  get description() {
+  get description(): AbstractControl {
     return this.caravanForm.get('description');
   }
-  get berths() {
+  get berths(): AbstractControl {
     return this.caravanForm.get('berths');
   }
-  get order() {
+  get order(): AbstractControl {
     return this.caravanForm.get('order');
   }
-  get pets() {
+  get pets(): AbstractControl {
     return this.caravanForm.get('pets');
   }
-  get smoking() {
+  get smoking(): AbstractControl {
     return this.caravanForm.get('smoking');
   }
 

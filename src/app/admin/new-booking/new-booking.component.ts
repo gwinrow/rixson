@@ -9,7 +9,7 @@ import { BookingService } from '../../booking.service';
 import { Caravan } from '../../caravan';
 import { CaravanService } from '../../caravan.service';
 import { CustomerService } from '../../customer.service';
-import { Customer } from 'src/app/customer';
+import { Customer } from '../../customer';
 import * as moment from 'moment';
 
 @Component({

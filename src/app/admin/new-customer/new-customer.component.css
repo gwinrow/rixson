@@ -1,0 +1,15 @@
+form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+span.error {
+    color: red;
+}
+mat-form-field {
+    width: 100%;
+}
+
+button#submit {
+    margin-top: 20px;
+}
