@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatChipsModule } from '@angular/material/chips';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { TextFieldModule } from '@angular/cdk/text-field';
@@ -54,6 +55,7 @@ import { EditCustomerComponent } from './edit-customer/edit-customer.component';
     MatSlideToggleModule,
     MatDatepickerModule,
     MatMomentDateModule,
+    MatChipsModule,
     DragDropModule,
     TextFieldModule
   ],

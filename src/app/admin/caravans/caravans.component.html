@@ -7,7 +7,7 @@
       <div id="buttons">
         <a mat-button routerLink="/admin/edit-caravan/{{caravan.id}}">update</a>
         <a mat-button routerLink="/admin/bookings/{{caravan.id}}">bookings</a>
-        <a mat-button (click)="deleteCaravan(caravan)">delete</a>
+        <a mat-button *ngIf="canDeleteCaravan(caravan)" (click)="deleteCaravan(caravan)">delete</a>
       </div>
   </mat-card>
 </div>

@@ -7,13 +7,20 @@
   <mat-card *ngFor="let booking of bookings">
       <h3>{{booking.customer.firstName}} {{booking.customer.secondName}}</h3>
       <p>{{booking.caravan.name}}</p>
+      <mat-chip-list *ngIf="booking.cancelled">
+        <mat-chip selected color="warn">
+          Cancelled
+        </mat-chip>
+      </mat-chip-list>
       <p>From: {{booking.dateFrom | date}}<br>To: {{booking.dateTo | date}}</p>
       <p>Price: {{booking.price | currency: 'GBP'}} <ng-container *ngIf="booking.paid">Paid</ng-container></p>
+      <p *ngIf="showNotes">
+        <markdown [data]="booking.notes"></markdown>
+      </p>
       <div id="buttons">
-        <a mat-button routerLink="/admin/edit-booking/{{booking.id}}">update</a>
-        <a mat-button (click)="cancelBooking(booking)" *ngIf="!booking.cancelled">cancel</a>
-        <a mat-button (click)="activateBooking(booking)" *ngIf="booking.cancelled">activate</a>
-        <a mat-button (click)="deleteBooking(booking)">delete</a>
+        <a mat-button routerLink="/admin/edit-booking/{{booking.id}}" *ngIf="!booking.cancelled">update</a>
+        <button mat-button type="button" (click)="showNotes=!showNotes">{{moreless}}</button>
+        <button mat-button type="button" (click)="deleteBooking(booking)" *ngIf="booking.cancelled">delete</button>
       </div>
   </mat-card>
 </div>

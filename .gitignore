@@ -2,6 +2,7 @@
 
 # google api keys
 /src/environments/environment.ts
+/src/environments/environment.prod.ts
 
 # compiled output
 /dist

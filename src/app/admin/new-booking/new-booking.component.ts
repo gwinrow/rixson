@@ -280,30 +280,6 @@ export class NewBookingComponent implements OnInit {
         });
     }
   }
-  setFormOld(caravanId): Observable<Caravan> {
-    return new Observable(observer => {
-      this.caravanService.getCaravan(caravanId).subscribe(caravan => {
-        observer.next(caravan);
-        this.bookingService.getCaravanBookings(caravanId).subscribe(bookings => {
-          this.bookings = bookings;
-          this.dates.updateValueAndValidity();
-          bookings.forEach(booking => booking.caravan = caravan);
-          if (this.customers) {
-            bookings.forEach(booking => {
-              booking.customer = this.customers.find(customer => customer.id === booking.customerId);
-              });
-          } else {
-            this.customerService.getCustomers().subscribe(customers => {
-              this.customers = customers;
-              bookings.forEach(booking => {
-                booking.customer = customers.find(customer => customer.id === booking.customerId);
-                });
-              });
-          }
-          });
-        });
-    });
-  }
   newCustValidation() {
     if ((this.customers && this.customers.length)) {
       this.newCustomer.valueChanges.subscribe(value => {

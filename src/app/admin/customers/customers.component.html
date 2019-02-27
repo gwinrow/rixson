@@ -7,7 +7,7 @@
          <mat-icon>phone</mat-icon> {{customer.phone}}</p>
       <div id="buttons">
         <a mat-button routerLink="/admin/edit-customer/{{customer.id}}">update</a>
-        <a mat-button (click)="deleteCustomer(customer)">delete</a>
+        <a mat-button *ngIf="canDeleteCustomer(customer)" (click)="deleteCustomer(customer)">delete</a>
       </div>
   </mat-card>
 </div>

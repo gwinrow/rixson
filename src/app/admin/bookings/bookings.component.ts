@@ -14,8 +14,18 @@ import { CustomerService } from '../../customer.service';
   styleUrls: ['./bookings.component.css']
 })
 export class BookingsComponent implements OnInit {
+  showNotes = false;
+
   bookings: Booking[];
   caravan: Caravan;
+
+  get moreless() {
+    if (this.showNotes) {
+      return 'less';
+    } else {
+      return 'more...';
+    }
+  }
 
   get newBooking() {
     if (this.caravan) {

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, AbstractControl, ValidatorFn, AsyncValidatorFn, FormGroup, ValidationErrors } from '@angular/forms';
+import { FormBuilder, Validators, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
 import { CustomerService } from '../../customer.service';
@@ -7,9 +7,9 @@ import { BookingService } from '../../booking.service';
 import { Caravan } from '../../caravan';
 import { Customer } from '../../customer';
 import { Booking } from '../../booking';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { of } from 'rxjs';
-import { switchMap, map, first, filter } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -28,7 +28,6 @@ export class EditBookingComponent implements OnInit {
   booking: Booking;
 
   bookingForm = this.fb.group({
-    caravanId: ['', Validators.required],
     customerId: ['', Validators.required],
     dates: this.fb.group ({
       dateFrom: ['', { validators: Validators.required, updateOn: 'blur' }],
@@ -85,68 +84,23 @@ export class EditBookingComponent implements OnInit {
     this.dateTo.setErrors(null);
     return null;
   }
-  activationValidator: ValidatorFn = (control: FormGroup) => {
-    if (!control.value) {
-      const newBookings  = Object.assign([], this.bookings);
-      newBookings.push(this.booking);
-      if (!this.validateBookingDates(newBookings)) {
-        return {'unavailableDates': {value: control.value}};
-      }
-    }
-    return null;
+  cancelBooking() {
+    this.bookingService.updateBooking(this.booking, { 'cancelled': true });
+    this.router.navigate(['/admin/bookings/all']);
   }
-  caravanValidator: AsyncValidatorFn = (control: AbstractControl) => {
-    // this service call needs to return something
-    return this.bookingService.getCaravanBookings(control.value).pipe(
-      first(),
-      map(newbookings => {
-        if (!this.cancelled.value && !this.validateBookingDates(newbookings)) {
-          console.log('errororor');
-          return of({'unavailableDates': {value: control.value}});
-        }
-        console.log('NO - errororor');
-        return null;
-        })
-      );
-  }
+
   update(field: AbstractControl, value: Partial<Booking>) {
-    console.log('update ' + field.dirty + ' - ' + field.status.valueOf() + ' - ' + field.valid);
     if (field.dirty && field.valid) {
-      console.log('updating now');
       this.bookingService.updateBooking(this.booking, value);
-    } else if (field.dirty && field.pending) {
-      field.statusChanges.pipe(
-        filter(status => status !== 'PENDING'),
-        first()
-      ).subscribe(status => {
-          if (field.valid) {
-            console.log('updating now async');
-            this.bookingService.updateBooking(this.booking, value);
-          } else {
-            console.log('NOT updating now async - ' + status);
-          }
-        }
-      );
     }
   }
-  getFormValidationErrors() {
-    Object.keys(this.bookingForm.controls).forEach(key => {
-    const controlErrors: ValidationErrors = this.bookingForm.get(key).errors;
-    if (controlErrors != null) {
-          Object.keys(controlErrors).forEach(keyError => {
-            console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
-          });
-        }
-      });
-    }
+
   handleFormChanges() {
-    this.caravanId.valueChanges.subscribe(data => {
-        this.update(this.caravanId, { 'caravanId': data });
+    this.customerId.valueChanges.subscribe(data => {
+        this.update(this.customerId, { 'customerId': data });
       });
     this.dateFrom.valueChanges.subscribe(
       (data: moment.Moment) => {
-        console.log('dateFrom is moment: ' + moment.isMoment(data));
-        console.log('dateFrom: ' + data);
         data.milliseconds(0);
         data.seconds(1);
         data.minutes(0);
@@ -156,8 +110,6 @@ export class EditBookingComponent implements OnInit {
     );
     this.dateTo.valueChanges.subscribe(
       (data: moment.Moment) => {
-        console.log('dateTo is moment: ' + moment.isMoment(data));
-        console.log('dateTo: ' + data);
         data.milliseconds(0);
         data.seconds(0);
         data.minutes(0);
@@ -174,15 +126,9 @@ export class EditBookingComponent implements OnInit {
     this.paid.valueChanges.subscribe(
       data => this.update(this.paid, { 'paid': data })
     );
-    this.cancelled.valueChanges.subscribe(
-      data => this.update(this.cancelled, { 'cancelled': data })
-    );
   }
   get dates(): FormGroup {
     return this.bookingForm.get('dates') as FormGroup;
-  }
-  get caravanId(): AbstractControl {
-    return this.bookingForm.get('caravanId');
   }
   get customerId(): AbstractControl {
     return this.bookingForm.get('customerId');
@@ -202,21 +148,15 @@ export class EditBookingComponent implements OnInit {
   get paid(): AbstractControl {
     return this.bookingForm.get('paid');
   }
-  get cancelled(): AbstractControl {
-    return this.bookingForm.get('cancelled');
-  }
 
   constructor(private fb: FormBuilder,
+    private router: Router,
     private route: ActivatedRoute,
     private caravanService: CaravanService,
     private customerService: CustomerService,
     private bookingService: BookingService) { }
 
   ngOnInit() {
-    this.dates.setValidators(this.unavailableDatesValidator);
-    this.caravanId.setAsyncValidators(this.caravanValidator);
-    this.cancelled.setValidators(this.activationValidator);
-    this.caravanService.getCaravans().subscribe(caravans => this.caravans = caravans);
     this.customerService.getCustomers().subscribe(customers => this.customers = customers);
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
@@ -229,20 +169,12 @@ export class EditBookingComponent implements OnInit {
         this.bookingForm.patchValue(this.booking);
         this.dateFrom.setValue(moment(this.booking.dateFrom));
         this.dateTo.setValue(moment(this.booking.dateTo));
+        this.caravanService.getCaravan(booking.caravanId).subscribe(caravan => this.selectedVan = caravan);
+        this.bookingService.getCaravanBookings(booking.caravanId).subscribe(bookings => this.bookings = bookings);
+        this.dates.setValidators(this.unavailableDatesValidator);
+
         this.handleFormChanges();
-        this.setForm(booking.caravanId);
       });
     });
-  }
-  setForm(caravanId) {
-    if (this.caravans) {
-      this.selectedVan = this.caravans.find(caravan => caravan.id === caravanId);
-    } else {
-      this.caravanService.getCaravan(caravanId).subscribe(caravan => this.selectedVan = caravan);
-    }
-    this.bookingService.getCaravanBookings(caravanId).subscribe(bookings => {
-      this.bookings = bookings;
-      this.dates.updateValueAndValidity();
-      });
   }
 }

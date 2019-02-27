@@ -1,21 +1,9 @@
-<h1>Edit Booking</h1>
+<h1>Edit Booking<ng-container *ngIf="selectedVan"> for {{selectedVan.name}}</ng-container></h1>
 <a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a><br>
 <form [formGroup]="bookingForm">
     <div class="slider">
-        <mat-slide-toggle color="primary" formControlName="cancelled">Cancelled</mat-slide-toggle>
-        <mat-error *ngIf="cancelled.invalid">Check the dates</mat-error>
-    </div>
-    <div class="slider">
         <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>
     </div>
-    <ng-container *ngIf="caravans">
-        <mat-form-field>
-            <mat-select placeholder="Caravan" formControlName="caravanId">
-                <mat-option *ngFor="let van of caravans" [value]="van.id">{{van.name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="caravanId.invalid">Check the dates</mat-error>
-        </mat-form-field>
-    </ng-container>
     <mat-form-field>
         <mat-select placeholder="Customer" formControlName="customerId">
             <mat-option *ngFor="let customer of customers" [value]="customer.id">{{customer.firstName}} {{customer.secondName}}</mat-option>
@@ -49,5 +37,9 @@
     </div>
     <div class="previewNote">
         <markdown [data]="note.value"></markdown>
+    </div>
+
+    <div>
+        <button mat-raised-button color="accent" type="button" (click)="cancelBooking()">Cancel booking</button>
     </div>
 </form>
