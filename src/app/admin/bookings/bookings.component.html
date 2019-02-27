@@ -14,12 +14,12 @@
       </mat-chip-list>
       <p>From: {{booking.dateFrom | date}}<br>To: {{booking.dateTo | date}}</p>
       <p>Price: {{booking.price | currency: 'GBP'}} <ng-container *ngIf="booking.paid">Paid</ng-container></p>
-      <p *ngIf="showNotes">
+      <p *ngIf="isShowNotes(booking)">
         <markdown [data]="booking.notes"></markdown>
       </p>
       <div id="buttons">
         <a mat-button routerLink="/admin/edit-booking/{{booking.id}}" *ngIf="!booking.cancelled">update</a>
-        <button mat-button type="button" (click)="showNotes=!showNotes">{{moreless}}</button>
+        <button mat-button type="button" *ngIf="booking.notes" (click)="showNotes(booking)">{{moreless(booking)}}</button>
         <button mat-button type="button" (click)="deleteBooking(booking)" *ngIf="booking.cancelled">delete</button>
       </div>
   </mat-card>

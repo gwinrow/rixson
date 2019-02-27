@@ -14,13 +14,22 @@ import { CustomerService } from '../../customer.service';
   styleUrls: ['./bookings.component.css']
 })
 export class BookingsComponent implements OnInit {
-  showNotes = false;
-
   bookings: Booking[];
   caravan: Caravan;
+  showNotesArray: Booking[] = [];
 
-  get moreless() {
-    if (this.showNotes) {
+  showNotes(booking) {
+    if (this.isShowNotes(booking)) {
+      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking));
+    } else {
+      this.showNotesArray.push(booking);
+    }
+  }
+  isShowNotes(booking): boolean {
+    return !!this.showNotesArray.find(abooking => abooking === booking);
+  }
+  moreless(booking) {
+    if (this.isShowNotes(booking)) {
       return 'less';
     } else {
       return 'more...';
