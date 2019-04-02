@@ -5,6 +5,7 @@
 </div>
 <div id="droplist">
   <mat-card *ngFor="let booking of bookings">
+    <ng-container *ngIf="booking.customer && booking.caravan">
       <h3>{{booking.customer.firstName}} {{booking.customer.secondName}}</h3>
       <p>{{booking.caravan.name}}</p>
       <mat-chip-list *ngIf="booking.cancelled">
@@ -22,6 +23,7 @@
         <button mat-button type="button" *ngIf="booking.notes" (click)="showNotes(booking)">{{moreless(booking)}}</button>
         <button mat-button type="button" (click)="deleteBooking(booking)" *ngIf="booking.cancelled">delete</button>
       </div>
+    </ng-container>
   </mat-card>
 </div>
 <span class="done">

@@ -53,6 +53,9 @@ export class BookingsComponent implements OnInit {
     this.update(booking, { 'cancelled': false });
   }
   deleteBooking(booking: Booking) {
+    if (this.isShowNotes(booking)) {
+      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking));
+    }
     this.bookingService.deleteBooking(booking);
   }
   constructor(private bookingService: BookingService,
@@ -67,7 +70,8 @@ export class BookingsComponent implements OnInit {
       this.caravan = null;
       this.bookings = null;
       if (caravanId === 'all') {
-        this.bookingService.getBookings().subscribe(bookings => {
+        this.bookingService.getAllBookings().subscribe(bookings => {
+          this.bookings = bookings;
           this.caravanService.getCaravans().subscribe(caravans => {
             bookings.forEach(booking => {
               booking.caravan = caravans.find(caravan => caravan.id === booking.caravanId);
@@ -76,7 +80,6 @@ export class BookingsComponent implements OnInit {
           this.customerService.getCustomers().subscribe(customers => {
             bookings.forEach(booking => {
               booking.customer = customers.find(customer => customer.id === booking.customerId);
-              this.bookings = bookings;
             });
             });
           });

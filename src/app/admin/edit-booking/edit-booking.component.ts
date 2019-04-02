@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
@@ -8,7 +8,7 @@ import { Caravan } from '../../caravan';
 import { Customer } from '../../customer';
 import { Booking } from '../../booking';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 
@@ -17,7 +17,7 @@ import * as moment from 'moment';
   templateUrl: './edit-booking.component.html',
   styleUrls: ['./edit-booking.component.css']
 })
-export class EditBookingComponent implements OnInit {
+export class EditBookingComponent implements OnInit, OnDestroy {
 
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
 
@@ -26,6 +26,12 @@ export class EditBookingComponent implements OnInit {
   customers: Customer[];
   caravans: Caravan[];
   booking: Booking;
+
+  subsCustomer: Subscription;
+  subsParamMap: Subscription;
+  subsBooking: Subscription;
+  subsBookings: Subscription;
+  subsCaravan: Subscription;
 
   bookingForm = this.fb.group({
     customerId: ['', Validators.required],
@@ -157,24 +163,43 @@ export class EditBookingComponent implements OnInit {
     private bookingService: BookingService) { }
 
   ngOnInit() {
-    this.customerService.getCustomers().subscribe(customers => this.customers = customers);
-    this.route.paramMap.pipe(
+    this.subsCustomer = this.customerService.getCustomers().subscribe(customers => this.customers = customers);
+    this.subsParamMap = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
       this.selectedVan = null;
       this.booking = null;
       this.bookings = null;
-      this.bookingService.getBooking(id).subscribe((booking: Booking) => {
+      this.subsBooking = this.bookingService.getBooking(id).subscribe((booking: Booking) => {
         this.booking = booking;
         this.bookingForm.patchValue(this.booking);
         this.dateFrom.setValue(moment(this.booking.dateFrom));
         this.dateTo.setValue(moment(this.booking.dateTo));
-        this.caravanService.getCaravan(booking.caravanId).subscribe(caravan => this.selectedVan = caravan);
-        this.bookingService.getCaravanBookings(booking.caravanId).subscribe(bookings => this.bookings = bookings);
+        this.subsCaravan = this.caravanService.getCaravan(booking.caravanId).subscribe(caravan => this.selectedVan = caravan);
+        this.subsBookings = this.bookingService.getCaravanBookings(booking.caravanId).subscribe(bookings => this.bookings = bookings);
         this.dates.setValidators(this.unavailableDatesValidator);
 
         this.handleFormChanges();
       });
     });
+  }
+
+  ngOnDestroy() {
+    console.log('destroying this');
+    if (this.subsCustomer) {
+      this.subsCustomer.unsubscribe();
+    }
+    if (this.subsParamMap) {
+      this.subsParamMap.unsubscribe();
+    }
+    if (this.subsBooking) {
+      this.subsBooking.unsubscribe();
+    }
+    if (this.subsBookings) {
+      this.subsBookings.unsubscribe();
+    }
+    if (this.subsCaravan) {
+      this.subsCaravan.unsubscribe();
+    }
   }
 }
