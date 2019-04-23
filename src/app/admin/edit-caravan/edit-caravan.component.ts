@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
 import { Caravan } from '../../caravan';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ImageTools } from '../image-tools';
 
@@ -13,7 +13,7 @@ import { ImageTools } from '../image-tools';
   templateUrl: './edit-caravan.component.html',
   styleUrls: ['./edit-caravan.component.css']
 })
-export class EditCaravanComponent implements OnInit {
+export class EditCaravanComponent implements OnInit, OnDestroy {
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   caravan: Caravan;
 
@@ -30,6 +30,8 @@ export class EditCaravanComponent implements OnInit {
   });
 
   isLoadImageError = false;
+
+  subsCaravan: Subscription;
 
   loadImage(event) {
     this.isLoadImageError = false;
@@ -112,11 +114,18 @@ export class EditCaravanComponent implements OnInit {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
-      this.service.getCaravans().subscribe((caravans: Caravan[]) => {
+      this.subsCaravan = this.service.getCaravans().subscribe((caravans: Caravan[]) => {
         this.caravan = caravans[caravans.findIndex(caravan => caravan.id === id)];
         this.caravanForm.patchValue(this.caravan);
         this.handleFormChanges();
       });
     });
+  }
+
+  ngOnDestroy() {
+    console.log('destroying this');
+    if (this.subsCaravan) {
+      this.subsCaravan.unsubscribe();
+    }
   }
 }

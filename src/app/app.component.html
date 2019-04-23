@@ -4,10 +4,10 @@
     
     <span *ngIf="size!=screenSize.SMALL && size!=screenSize.XSMALL">
       <button mat-icon-button matTooltip="Home" routerLink="/"><mat-icon>home</mat-icon></button>
-      <button mat-icon-button matTooltip="Price list" routerLink="/prices"><mat-icon>monetization_on</mat-icon></button>
-      <button mat-icon-button matTooltip="General Information" routerLink="/info"><mat-icon>info</mat-icon></button>
-      <button mat-icon-button matTooltip="About us" routerLink="/about"><mat-icon>help</mat-icon></button>
-      <button mat-icon-button matTooltip="Find us" routerLink="/contact"><mat-icon>place</mat-icon></button>
+      <button mat-button matTooltip="Price list" routerLink="/prices">Price list</button>
+      <button mat-button matTooltip="General Information" routerLink="/info">Info</button>
+      <button mat-button matTooltip="About us" routerLink="/about">About us</button>
+      <button mat-button matTooltip="Find us" routerLink="/contact">Find us</button>
       <ng-container *ngIf="loggedIn || adminCookie">
         <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>settings</mat-icon></button>
         <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>power_settings_new</mat-icon></button>

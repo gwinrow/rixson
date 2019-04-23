@@ -63,13 +63,23 @@ export class NewCaravanComponent implements OnInit {
       this.showSpinner = true;
       const caravan = new Caravan(this.caravanForm.value);
       const _that = this;
-      this.service.newCaravan(caravan, this.images).subscribe(
-        x => _that.router.navigate(['/admin/caravans']),
-        err => {
-          _that.updateError = err;
-          this.showSpinner = false;
-        }
-      );
+      if (this.images.length) {
+        this.service.newCaravan(caravan, this.images).subscribe(
+          x => _that.router.navigate(['/admin/caravans']),
+          err => {
+            _that.updateError = err;
+            this.showSpinner = false;
+          }
+        );
+      } else {
+        this.service.newCaravanNoImages(caravan).subscribe(
+          x => _that.router.navigate(['/admin/caravans']),
+          err => {
+            _that.updateError = err;
+            this.showSpinner = false;
+          }
+        );
+      }
     } else {
       this.updateError = 'Invalid form. Please check all required fields have been entered correctly.';
     }

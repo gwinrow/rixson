@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CustomerService } from '../../customer.service';
 import { Customer } from '../../customer';
@@ -11,20 +11,23 @@ import { Customer } from '../../customer';
   templateUrl: './edit-customer.component.html',
   styleUrls: ['./edit-customer.component.css']
 })
-export class EditCustomerComponent implements OnInit {
+export class EditCustomerComponent implements OnInit, OnDestroy {
 
   customerForm = this.fb.group({
-    firstName: ['', Validators.required],
-    secondName: ['', Validators.required],
-    email: [''],
-    phone: [''],
-    addressLine1: [''],
-    addressLine2: [''],
-    addressLine3: [''],
-    postcode: ['']
+    firstName: ['', { validators: Validators.required, updateOn: 'blur' }],
+    secondName: ['', { validators: Validators.required, updateOn: 'blur' }],
+    email: ['', { updateOn: 'blur' }],
+    phone: ['', { updateOn: 'blur' }],
+    addressLine1: ['', { updateOn: 'blur' }],
+    addressLine2: ['', { updateOn: 'blur' }],
+    addressLine3: ['', { updateOn: 'blur' }],
+    postcode: ['', { updateOn: 'blur' }]
   });
 
   customer: Customer;
+
+  subsCustomer: Subscription;
+
   update(field: AbstractControl, value: Partial<Customer>) {
     if (field.dirty && field.valid) {
       this.customerService.updateCustomer(this.customer, value);
@@ -89,7 +92,7 @@ export class EditCustomerComponent implements OnInit {
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
-      this.customerService.getCustomers().subscribe((customers: Customer[]) => {
+      this.subsCustomer = this.customerService.getCustomers().subscribe((customers: Customer[]) => {
         this.customer = customers[customers.findIndex(customer => customer.id === id)];
         this.customerForm.patchValue(this.customer);
         this.handleFormChanges();
@@ -97,4 +100,10 @@ export class EditCustomerComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    console.log('destroying this');
+    if (this.subsCustomer) {
+      this.subsCustomer.unsubscribe();
+    }
+  }
 }

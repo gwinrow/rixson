@@ -68,6 +68,18 @@ export class CaravanService {
     });
   }
 
+  newCaravanNoImages(caravan: Caravan): Observable<string> {
+    return  new Observable(observer => {
+      const _that = this;
+      const tasks = new Array<Observable<firebase.storage.UploadTaskSnapshot>>();
+      caravan.id = this.afs.createId();
+      const caravansCollection = _that.afs.collection<Caravan>(this.COLLECTION);
+      caravan.createdDate = (new Date()).toJSON();
+      caravansCollection.doc(caravan.id).set({...caravan});
+      observer.next('SUCCESS');
+    });
+  }
+
   newCaravan(caravan: Caravan, images: { imageURL: SafeResourceUrl, imageFile: any }[]): Observable<string> {
     return  new Observable(observer => {
       const _that = this;

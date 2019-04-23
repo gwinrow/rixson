@@ -1,5 +1,5 @@
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a>
 <h1>Edit Booking<ng-container *ngIf="selectedVan"> for {{selectedVan.name}}</ng-container></h1>
-<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a><br>
 <form [formGroup]="bookingForm">
     <div class="slider">
         <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>

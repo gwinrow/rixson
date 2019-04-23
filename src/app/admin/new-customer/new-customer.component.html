@@ -1,5 +1,5 @@
-<h1>New Customer</h1>
 <a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/customers">Customers</a>
+<h1>New Customer</h1>
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
   <mat-form-field>
     <input matInput placeholder="First name" formControlName="firstName">
