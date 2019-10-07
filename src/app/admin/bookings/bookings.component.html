@@ -7,7 +7,7 @@
   <mat-card *ngFor="let booking of bookings">
     <ng-container *ngIf="booking.customer && booking.caravan">
       <h3>{{booking.customer.firstName}} {{booking.customer.secondName}}</h3>
-      <p>{{booking.caravan.name}}</p>
+      <p><a routerLink="/admin/bookings/{{booking.caravan.id}}">{{booking.caravan.name}}</a></p>
       <mat-chip-list *ngIf="booking.cancelled">
         <mat-chip selected color="warn">
           Cancelled
