@@ -8,9 +8,10 @@
   </mat-toolbar>
   <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
   <p>
-    location: {{caravan.location}} berths: {{caravan.berths}} grade: {{caravan.grade}}<br>
-    <ng-container *ngIf="caravan.smoking"><i class="material-icons" matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</i></ng-container>
-    <ng-container *ngIf="caravan.pets"><i class="material-icons"matTooltip="pets are allowed" matTooltipPosition="above">pets</i></ng-container>
+    {{caravan.grade | titlecase}}. {{caravan.berths}} berth caravan. <br>
+    <ng-container *ngIf="!caravan.smoking"><mat-icon matTooltip="smoking is not allowed" matTooltipPosition="above">smoke_free</mat-icon></ng-container>
+    <ng-container *ngIf="caravan.smoking"><mat-icon matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</mat-icon></ng-container>
+    <ng-container *ngIf="caravan.pets"><mat-icon matTooltip="pets are allowed" matTooltipPosition="above">pets</mat-icon></ng-container>
   </p>  
   <h2>{{caravan.summary}}</h2>
   <markdown [data]="caravan.description"></markdown>

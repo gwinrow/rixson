@@ -1,5 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# google hosting
+.firebase
+
 # google api keys
 /src/environments/environment.ts
 /src/environments/environment.prod.ts

@@ -21,8 +21,9 @@
 			<mat-grid-tile-header>{{caravan.name}}</mat-grid-tile-header>
 			
 			<mat-grid-tile-footer >
-				{{caravan.berths}} berth caravan.  {{caravan.grade}} grade.
+				{{caravan.grade | titlecase}}. {{caravan.berths}} berth caravan.
 				<span>
+					<ng-container *ngIf="!caravan.smoking"><mat-icon matTooltip="smoking is not allowed" matTooltipPosition="above">smoke_free</mat-icon></ng-container>
 					<ng-container *ngIf="caravan.smoking"><mat-icon matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</mat-icon></ng-container>
 					<ng-container *ngIf="caravan.pets"><mat-icon matTooltip="pets are allowed" matTooltipPosition="above">pets</mat-icon></ng-container>
 				</span>
