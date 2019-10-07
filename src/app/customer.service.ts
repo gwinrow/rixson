@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Customer } from './customer';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +13,25 @@ export class CustomerService {
 
   getCustomers (): Observable<Customer[]> {
     return this.afs.collection<Customer>(this.COLLECTION).valueChanges().pipe(
-      catchError(this.handleError('getCustomers', []))
+      map(customers => customers.sort((a, b) => this.compareCustomers(a, b)))
     );
   }
 
+  compareCustomers(a: Customer, b: Customer): number {
+    const nameA = a.secondName.toLowerCase(), nameB = b.secondName.toLowerCase();
+    if (nameA < nameB) {
+      // sort string ascending
+      return -1;
+    } else if (nameA > nameB) {
+      return 1;
+    } else {
+      return 0;
+      // default return value (no sorting)
+    }
+  }
+
   getCustomer(customerId: string): Observable<Customer> {
-    return this.afs.doc<Customer>(this.COLLECTION_PATH + customerId).valueChanges().pipe(
-      catchError(this.handleError('getCustomer', null))
-    );
+    return this.afs.doc<Customer>(this.COLLECTION_PATH + customerId).valueChanges();
   }
   updateCustomer(customer: Customer, data: Partial<Customer>) {
     this.afs.doc<Customer>(this.COLLECTION_PATH + customer.id).update(data);
