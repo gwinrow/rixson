@@ -114,13 +114,28 @@ export class CaravanService {
     });
   }
 
-  /** GET caravans from the server */
   getCaravans(): Observable<Caravan[]> {
     return this.afs.collection<Caravan>(this.COLLECTION).valueChanges().pipe(
-      map(caravans => caravans.sort((a, b) => a.order - b.order))
+      map(caravans => caravans.sort((a, b) => this.caravanComparator(a, b)))
     );
   }
-
+  caravanComparator(a: Caravan, b: Caravan): number {
+    const GRADES: string[] = [ 'luxury gold', 'gold', 'silver plus', 'silver', 'bronze' ];
+    const aindex: number = GRADES.indexOf(a.grade);
+    const bindex: number = GRADES.indexOf(b.grade);
+    let i = 0;
+    if (aindex !== -1 && bindex !== -1) {
+      i = aindex - bindex;
+    }
+    if (i !== 0) {
+      return i;
+    }
+    i = a.order - b.order;
+    if (i !== 0) {
+      return i;
+    }
+    return a.name.localeCompare(b.name);
+  }
   getCaravan(caravanId): Observable<Caravan> {
     return this.afs.doc<Caravan>(this.COLLECTION_PATH + caravanId).valueChanges();
   }

@@ -13,11 +13,11 @@ export class CustomerService {
 
   getCustomers (): Observable<Customer[]> {
     return this.afs.collection<Customer>(this.COLLECTION).valueChanges().pipe(
-      map(customers => customers.sort((a, b) => this.compareCustomers(a, b)))
+      map(customers => customers.sort((a, b) => this.customerComparator(a, b)))
     );
   }
 
-  compareCustomers(a: Customer, b: Customer): number {
+  customerComparator(a: Customer, b: Customer): number {
     const nameA = a.secondName.toLowerCase(), nameB = b.secondName.toLowerCase();
     if (nameA < nameB) {
       // sort string ascending
