@@ -8,8 +8,6 @@ import { Booking } from '../../booking';
 import { BookingService } from '../../booking.service';
 import { Caravan } from '../../caravan';
 import { CaravanService } from '../../caravan.service';
-import { CustomerService } from '../../customer.service';
-import { Customer } from '../../customer';
 import * as moment from 'moment';
 
 @Component({
@@ -22,31 +20,20 @@ export class NewBookingComponent implements OnInit {
 
   selectedVan: Caravan;
   bookings: Booking[];
-  customers: Customer[];
   caravans: Caravan[];
   caravan: Caravan;
 
   bookingForm = this.fb.group({
+    name: ['', Validators.required],
+    status: ['pending', Validators.required],
     caravanId: ['', Validators.required],
-    customerId: ['', Validators.required],
     dates: this.fb.group ({
       dateFrom: ['', Validators.required],
       dateTo: ['', Validators.required],
     }),
+    deposit: [0.0, Validators.required],
     price: [0.0, Validators.required],
-    notes: [''],
-    paid: [false],
-    newCustomer: [false],
-    customer: this.fb.group({
-      firstName: [''],
-      secondName: [''],
-      email: [''],
-      phone: [''],
-      addressLine1: [''],
-      addressLine2: [''],
-      addressLine3: [''],
-      postcode: ['']
-    })
+    notes: ['']
   });
 
   updateError = '';
@@ -119,22 +106,9 @@ export class NewBookingComponent implements OnInit {
     this.updateError = '';
     if (this.bookingForm.valid) {
       this.showSpinner = true;
-      if (!(this.customers && this.customers.length) || this.newCustomer.value) {
-        const cust = new Customer();
-        cust.firstName = this.firstName.value;
-        cust.secondName = this.secondName.value;
-        cust.email = this.email.value;
-        cust.phone = this.phone.value;
-        cust.addressLine1 = this.addressLine1.value;
-        cust.addressLine2 = this.addressLine2.value;
-        cust.addressLine3 = this.addressLine3.value;
-        cust.postcode = this.postcode.value;
-        this.customerService.newCustomer(cust);
-        this.customerId.setValue(cust.id);
-      }
       const booking = new Booking();
+      booking.name = this.name.value;
       booking.caravanId = this.caravanId.value;
-      booking.customerId = this.customerId.value;
       const dateFrom: moment.Moment = this.dateFrom.value;
       dateFrom.milliseconds(0);
       dateFrom.seconds(1);
@@ -147,10 +121,10 @@ export class NewBookingComponent implements OnInit {
       dateTo.hours(12);
       booking.dateFrom = dateFrom.toJSON();
       booking.dateTo = dateTo.toJSON();
+      booking.deposit = this.deposit.value;
       booking.price = this.price.value;
       booking.notes = this.notes.value;
-      booking.paid = this.paid.value;
-      booking.cancelled = false;
+      booking.status = this.status.value;
       this.bookingService.newBooking(booking);
       if (this.caravan) {
         this.router.navigate(['/admin/bookings/' + this.caravan.id]);
@@ -167,8 +141,8 @@ export class NewBookingComponent implements OnInit {
   get caravanId(): AbstractControl {
     return this.bookingForm.get('caravanId');
   }
-  get customerId(): AbstractControl {
-    return this.bookingForm.get('customerId');
+  get name(): AbstractControl {
+    return this.bookingForm.get('name');
   }
   get dateFrom(): AbstractControl {
     return this.bookingForm.get('dates.dateFrom');
@@ -176,55 +150,27 @@ export class NewBookingComponent implements OnInit {
   get dateTo(): AbstractControl {
     return this.bookingForm.get('dates.dateTo');
   }
+  get deposit(): AbstractControl {
+    return this.bookingForm.get('deposit');
+  }
   get price(): AbstractControl {
     return this.bookingForm.get('price');
   }
   get notes(): AbstractControl {
     return this.bookingForm.get('notes');
   }
-  get paid(): AbstractControl {
-    return this.bookingForm.get('paid');
+  get status(): AbstractControl {
+    return this.bookingForm.get('status');
   }
-  get newCustomer(): AbstractControl {
-    return this.bookingForm.get('newCustomer');
-  }
-  get firstName(): AbstractControl {
-    return this.bookingForm.get('customer.firstName');
-  }
-  get secondName(): AbstractControl {
-    return this.bookingForm.get('customer.secondName');
-  }
-  get email(): AbstractControl {
-    return this.bookingForm.get('customer.email');
-  }
-  get phone(): AbstractControl {
-    return this.bookingForm.get('customer.phone');
-  }
-  get addressLine1(): AbstractControl {
-    return this.bookingForm.get('customer.addressLine1');
-  }
-  get addressLine2(): AbstractControl {
-    return this.bookingForm.get('customer.addressLine2');
-  }
-  get addressLine3(): AbstractControl {
-    return this.bookingForm.get('customer.addressLine3');
-  }
-  get postcode(): AbstractControl {
-    return this.bookingForm.get('customer.postcode');
-  }
+
   constructor(private fb: FormBuilder,
     private bookingService: BookingService,
     private router: Router,
     private route: ActivatedRoute,
-    private caravanService: CaravanService,
-    private customerService: CustomerService) { }
+    private caravanService: CaravanService) { }
 
   ngOnInit() {
     this.dates.setValidators(this.unavailableDatesValidator);
-    this.customerService.getCustomers().subscribe(customers => {
-      this.customers = customers;
-      this.newCustValidation();
-      });
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('caravanId')))
     ).subscribe(caravanId => {
@@ -267,46 +213,6 @@ export class NewBookingComponent implements OnInit {
   }
   fillBooking(caravan: Caravan) {
     this.bookings.forEach(booking => booking.caravan = caravan);
-    if (this.customers) {
-      this.bookings.forEach(booking => {
-        booking.customer = this.customers.find(customer => customer.id === booking.customerId);
-        });
-    } else {
-      this.customerService.getCustomers().subscribe(customers => {
-        this.customers = customers;
-        this.bookings.forEach(booking => {
-          booking.customer = customers.find(customer => customer.id === booking.customerId);
-          });
-        });
-    }
   }
-  newCustValidation() {
-    if ((this.customers && this.customers.length)) {
-      this.newCustomer.valueChanges.subscribe(value => {
-        if (value) {
-          this.customerId.clearValidators();
-          this.firstName.setValidators(Validators.required);
-          this.secondName.setValidators(Validators.required);
-          this.customerId.updateValueAndValidity();
-          this.firstName.updateValueAndValidity();
-          this.secondName.updateValueAndValidity();
-        } else {
-          this.customerId.setValidators(Validators.required);
-          this.firstName.clearValidators();
-          this.secondName.clearValidators();
-          this.customerId.updateValueAndValidity();
-          this.firstName.updateValueAndValidity();
-          this.secondName.updateValueAndValidity();
-        }
 
-        });
-    } else {
-      this.customerId.clearValidators();
-      this.firstName.setValidators(Validators.required);
-      this.secondName.setValidators(Validators.required);
-      this.customerId.updateValueAndValidity();
-      this.firstName.updateValueAndValidity();
-      this.secondName.updateValueAndValidity();
-    }
-  }
 }

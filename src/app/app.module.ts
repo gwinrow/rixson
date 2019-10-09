@@ -38,7 +38,6 @@ import { ShareModule } from './share.module';
 
 import { CaravanService } from './caravan.service';
 import { BookingService } from './booking.service';
-import { CustomerService } from './customer.service';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { BreakPointsService } from './break-points.service';
@@ -95,7 +94,6 @@ import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
   providers: [
     CaravanService,
     BookingService,
-    CustomerService,
     AuthService,
     UserService,
     BreakPointsService,

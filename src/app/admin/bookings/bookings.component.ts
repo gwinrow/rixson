@@ -6,7 +6,6 @@ import { Booking } from '../../booking';
 import { BookingService } from '../../booking.service';
 import { Caravan } from '../../caravan';
 import { CaravanService } from '../../caravan.service';
-import { CustomerService } from '../../customer.service';
 
 @Component({
   selector: 'app-bookings',
@@ -43,15 +42,7 @@ export class BookingsComponent implements OnInit {
       return '/admin/new-booking/all';
     }
   }
-  update(booking: Booking, value: Partial<Booking>) {
-    this.bookingService.updateBooking(booking, value);
-  }
-  cancelBooking(booking: Booking) {
-    this.update(booking, { 'cancelled': true });
-  }
-  activateBooking(booking: Booking) {
-    this.update(booking, { 'cancelled': false });
-  }
+
   deleteBooking(booking: Booking) {
     if (this.isShowNotes(booking)) {
       this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking));
@@ -60,8 +51,7 @@ export class BookingsComponent implements OnInit {
   }
   constructor(private bookingService: BookingService,
     private route: ActivatedRoute,
-    private caravanService: CaravanService,
-    private customerService: CustomerService) { }
+    private caravanService: CaravanService) { }
 
   ngOnInit() {
     this.route.paramMap.pipe(
@@ -77,11 +67,6 @@ export class BookingsComponent implements OnInit {
               booking.caravan = caravans.find(caravan => caravan.id === booking.caravanId);
               });
             });
-          this.customerService.getCustomers().subscribe(customers => {
-            bookings.forEach(booking => {
-              booking.customer = customers.find(customer => customer.id === booking.customerId);
-            });
-            });
           });
       } else {
         this.caravanService.getCaravan(caravanId).subscribe(caravan => {
@@ -89,11 +74,6 @@ export class BookingsComponent implements OnInit {
           this.bookingService.getCaravanBookings(caravanId).subscribe(bookings => {
             this.bookings = bookings;
             bookings.forEach(booking => booking.caravan = caravan);
-            this.customerService.getCustomers().subscribe(customers => {
-              bookings.forEach(booking => {
-                booking.customer = customers.find(customer => customer.id === booking.customerId);
-                });
-              });
             });
           });
       }

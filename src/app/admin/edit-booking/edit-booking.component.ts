@@ -2,10 +2,8 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { CaravanService } from '../../caravan.service';
-import { CustomerService } from '../../customer.service';
 import { BookingService } from '../../booking.service';
 import { Caravan } from '../../caravan';
-import { Customer } from '../../customer';
 import { Booking } from '../../booking';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription, of } from 'rxjs';
@@ -23,26 +21,24 @@ export class EditBookingComponent implements OnInit, OnDestroy {
 
   selectedVan: Caravan;
   bookings: Booking[];
-  customers: Customer[];
   caravans: Caravan[];
   booking: Booking;
 
-  subsCustomer: Subscription;
   subsParamMap: Subscription;
   subsBooking: Subscription;
   subsBookings: Subscription;
   subsCaravan: Subscription;
 
   bookingForm = this.fb.group({
-    customerId: ['', Validators.required],
+    name: ['', { validators: Validators.required, updateOn: 'blur' }],
+    status: ['pending', { validators: Validators.required, updateOn: 'blur' }],
     dates: this.fb.group ({
       dateFrom: ['', { validators: Validators.required, updateOn: 'blur' }],
       dateTo: ['', { validators: Validators.required, updateOn: 'blur' }],
     }),
+    deposit: [0.0, { validators: Validators.required, updateOn: 'blur' }],
     price: [0.0, { validators: Validators.required, updateOn: 'blur' }],
-    notes: ['', { validators: Validators.required, updateOn: 'blur' }],
-    paid: [false],
-    cancelled: [false]
+    notes: ['', { validators: Validators.required, updateOn: 'blur' }]
   });
 
   updateError = '';
@@ -90,10 +86,6 @@ export class EditBookingComponent implements OnInit, OnDestroy {
     this.dateTo.setErrors(null);
     return null;
   }
-  cancelBooking() {
-    this.bookingService.updateBooking(this.booking, { 'cancelled': true });
-    this.router.navigate(['/admin/bookings/all']);
-  }
 
   update(field: AbstractControl, value: Partial<Booking>) {
     if (field.dirty && field.valid) {
@@ -102,8 +94,8 @@ export class EditBookingComponent implements OnInit, OnDestroy {
   }
 
   handleFormChanges() {
-    this.customerId.valueChanges.subscribe(data => {
-        this.update(this.customerId, { 'customerId': data });
+    this.name.valueChanges.subscribe(data => {
+        this.update(this.name, { 'name': data });
       });
     this.dateFrom.valueChanges.subscribe(
       (data: moment.Moment) => {
@@ -123,21 +115,29 @@ export class EditBookingComponent implements OnInit, OnDestroy {
         this.update(this.dateTo, { 'dateTo': data.toJSON() });
       }
     );
+    this.deposit.valueChanges.subscribe(
+      data => this.update(this.deposit, { 'deposit': data })
+    );
     this.price.valueChanges.subscribe(
       data => this.update(this.price, { 'price': data })
     );
     this.notes.valueChanges.subscribe(
       data => this.update(this.notes, { 'notes': data })
     );
-    this.paid.valueChanges.subscribe(
-      data => this.update(this.paid, { 'paid': data })
+    this.status.valueChanges.subscribe(
+      data => {
+        this.update(this.status, { 'status': data });
+        if (data === 'cancelled') {
+          this.router.navigate(['/admin/bookings/all']);
+        }
+      }
     );
   }
   get dates(): FormGroup {
     return this.bookingForm.get('dates') as FormGroup;
   }
-  get customerId(): AbstractControl {
-    return this.bookingForm.get('customerId');
+  get name(): AbstractControl {
+    return this.bookingForm.get('name');
   }
   get dateFrom(): AbstractControl {
     return this.bookingForm.get('dates.dateFrom');
@@ -145,25 +145,26 @@ export class EditBookingComponent implements OnInit, OnDestroy {
   get dateTo(): AbstractControl {
     return this.bookingForm.get('dates.dateTo');
   }
+  get deposit(): AbstractControl {
+    return this.bookingForm.get('deposit');
+  }
   get price(): AbstractControl {
     return this.bookingForm.get('price');
   }
   get notes(): AbstractControl {
     return this.bookingForm.get('notes');
   }
-  get paid(): AbstractControl {
-    return this.bookingForm.get('paid');
+  get status(): AbstractControl {
+    return this.bookingForm.get('status');
   }
 
   constructor(private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private caravanService: CaravanService,
-    private customerService: CustomerService,
     private bookingService: BookingService) { }
 
   ngOnInit() {
-    this.subsCustomer = this.customerService.getCustomers().subscribe(customers => this.customers = customers);
     this.subsParamMap = this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
@@ -186,9 +187,6 @@ export class EditBookingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.log('destroying this');
-    if (this.subsCustomer) {
-      this.subsCustomer.unsubscribe();
-    }
     if (this.subsParamMap) {
       this.subsParamMap.unsubscribe();
     }

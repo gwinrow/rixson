@@ -1,9 +1,16 @@
 <a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" [routerLink]="bookingsLink">Bookings</a>
 <h1>New Booking <ng-container *ngIf="caravan"> for {{caravan.name}}</ng-container></h1>
 <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
-    <div class="slider">
-        <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>
-    </div>
+    <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Status" formControlName="status">
+            <mat-option value="pending">Pending</mat-option>
+            <mat-option value="deposit paid">Deposit Paid</mat-option>
+            <mat-option value="fully paid">Fully Paid</mat-option>
+        </mat-select>
+    </mat-form-field> 
     <ng-container *ngIf="caravans">
         <mat-form-field>
             <mat-select placeholder="Caravan" formControlName="caravanId">
@@ -11,44 +18,6 @@
             </mat-select>
         </mat-form-field>
     </ng-container>
-    <div class="slider" *ngIf="customers && customers.length">
-        <mat-slide-toggle color="primary" formControlName="newCustomer">New customer</mat-slide-toggle>
-    </div>
-    <ng-container *ngIf="customers && customers.length && !newCustomer.value;else newCustForm">
-        <mat-form-field>
-            <mat-select placeholder="Customer" formControlName="customerId">
-                <mat-option *ngFor="let customer of customers" [value]="customer.id">{{customer.firstName}} {{customer.secondName}}</mat-option>
-            </mat-select>
-        </mat-form-field>    
-    </ng-container>
-    <ng-template #newCustForm>
-      <div class="subForm" formGroupName="customer">
-        <mat-form-field>
-            <input matInput placeholder="First name" formControlName="firstName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Last name" formControlName="secondName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Email" formControlName="email">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Phone" formControlName="phone">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Address" formControlName="addressLine1">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Address" formControlName="addressLine2">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Address" formControlName="addressLine3">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput placeholder="Postcode" formControlName="postcode">
-        </mat-form-field>
-      </div>
-    </ng-template>
     <ng-container formGroupName="dates">
         <mat-form-field>
             <input matInput [matDatepicker]="pickerFrom" placeholder="From date" formControlName="dateFrom">
@@ -64,6 +33,9 @@
     <ng-container *ngIf="selectedVan">
         <app-calendar [caravan]="selectedVan"></app-calendar>
     </ng-container>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Deposit" formControlName="deposit">
+    </mat-form-field>
     <mat-form-field>
         <input matInput type="number" placeholder="Price" formControlName="price">
     </mat-form-field>

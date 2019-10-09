@@ -1,19 +1,18 @@
-import { Customer } from './customer';
 import { Caravan } from './caravan';
 
 export class Booking {
     id: string;
     caravanId: string;
     caravan: Caravan;
-    customerId: string;
-    customer: Customer;
+    name: string;
     dateFrom: string;
     dateTo: string;
+    deposit: number;
     price: number;
-    paid: boolean;
     notes: string;
-    cancelled: boolean;
     createdDate: string;
+    // pending, deposit paid, fully paid, cancelled
+    status: string;
     public constructor(init?: Partial<Booking>) {
         Object.assign(this, init);
     }

@@ -5,26 +5,26 @@
 </div>
 <div id="droplist">
   <mat-card *ngFor="let booking of bookings">
-    <ng-container *ngIf="booking.customer && booking.caravan">
-      <h3>{{booking.customer.firstName}} {{booking.customer.secondName}}</h3>
-      <p><a routerLink="/admin/bookings/{{booking.caravan.id}}">{{booking.caravan.name}}</a></p>
-      <mat-chip-list *ngIf="booking.cancelled">
-        <mat-chip selected color="warn">
-          Cancelled
-        </mat-chip>
-      </mat-chip-list>
-      <p>From: {{booking.dateFrom | date}}<br>To: {{booking.dateTo | date}}</p>
-      <p>Price: {{booking.price | currency: 'GBP'}} <ng-container *ngIf="booking.paid">Paid</ng-container></p>
-      <p *ngIf="isShowNotes(booking)">
-        <markdown [data]="booking.notes"></markdown>
-      </p>
-      <div id="buttons">
-        <a mat-button routerLink="/admin/edit-booking/{{booking.id}}" *ngIf="!booking.cancelled">update</a>
-        <button mat-button type="button" *ngIf="booking.notes" (click)="showNotes(booking)">{{moreless(booking)}}</button>
-        <button mat-button type="button" (click)="deleteBooking(booking)" *ngIf="booking.cancelled">delete</button>
-      </div>
-    </ng-container>
-  </mat-card>
+      <ng-container *ngIf="booking.name && booking.caravan">
+        <h3>{{booking.name}}</h3>
+        <p><a routerLink="/admin/bookings/{{booking.caravan.id}}">{{booking.caravan.name}}</a></p>
+        <mat-chip-list *ngIf="booking.status == 'cancelled'">
+          <mat-chip selected color="warn">
+            Cancelled
+          </mat-chip>
+        </mat-chip-list>
+        <p>From: {{booking.dateFrom | date}}<br>To: {{booking.dateTo | date}}</p>
+        <p>Status: {{booking.status | titlecase}}</p>
+        <p *ngIf="isShowNotes(booking)">
+          <markdown [data]="booking.notes"></markdown>
+        </p>
+        <div id="buttons">
+          <a mat-button routerLink="/admin/edit-booking/{{booking.id}}" *ngIf="booking.status != 'cancelled'">update</a>
+          <button mat-button type="button" *ngIf="booking.notes" (click)="showNotes(booking)">{{moreless(booking)}}</button>
+          <button mat-button type="button" (click)="deleteBooking(booking)" *ngIf="booking.status == 'cancelled'">delete</button>
+        </div>
+      </ng-container>
+    </mat-card>
 </div>
 <span class="done">
   <button mat-fab color="primary" [routerLink]="newBooking">

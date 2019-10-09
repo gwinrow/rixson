@@ -60,25 +60,6 @@ export class BookingService {
       catchError(this.handleError('getCaravanBookings', []))
     );
   }
-
-  getCustomerBookings(customerId: string): Observable<Booking[]> {
-    const nowmillis = Date.now();
-    return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
-      map((bookings: Booking[]) => bookings.filter(booking => booking.customerId === customerId)),
-      map((bookings: Booking[]) => bookings.filter(booking => {
-        const dateTo = new Date(booking.dateTo);
-        return dateTo.getTime() > nowmillis;
-        })
-      ),
-      map((bookings: Booking[]) => bookings.sort((a, b) => {
-        const adate = new Date(a.dateFrom);
-        const bdate = new Date(b.dateFrom);
-        return adate.getTime() - bdate.getTime();
-        })
-      ),
-      catchError(this.handleError('getCustomerBookings', []))
-    );
-  }
   updateBooking(booking: Booking, data: Partial<Booking>) {
     this.afs.doc<Booking>(this.COLLECTION_PATH + booking.id).update(data);
   }

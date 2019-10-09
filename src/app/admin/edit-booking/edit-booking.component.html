@@ -1,14 +1,17 @@
 <a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a>
 <h1>Edit Booking<ng-container *ngIf="selectedVan"> for {{selectedVan.name}}</ng-container></h1>
 <form [formGroup]="bookingForm">
-    <div class="slider">
-        <mat-slide-toggle color="primary" formControlName="paid">Paid</mat-slide-toggle>
-    </div>
     <mat-form-field>
-        <mat-select placeholder="Customer" formControlName="customerId">
-            <mat-option *ngFor="let customer of customers" [value]="customer.id">{{customer.firstName}} {{customer.secondName}}</mat-option>
+        <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Status" formControlName="status">
+            <mat-option value="pending">Pending</mat-option>
+            <mat-option value="deposit paid">Deposit Paid</mat-option>
+            <mat-option value="fully paid">Fully Paid</mat-option>
+            <mat-option value="cancelled">Cancelled</mat-option>
         </mat-select>
-    </mat-form-field>    
+    </mat-form-field>  
     <ng-container formGroupName="dates">
         <mat-form-field>
             <input matInput [matDatepicker]="pickerFrom" placeholder="From date" formControlName="dateFrom">
@@ -25,6 +28,9 @@
         <app-calendar [caravan]="selectedVan"></app-calendar>
     </ng-container>
     <mat-form-field>
+        <input matInput type="number" placeholder="Deposit" formControlName="deposit">
+    </mat-form-field>
+    <mat-form-field>
         <input matInput type="number" placeholder="Price" formControlName="price">
     </mat-form-field>
     <mat-form-field hintLabel="Use markdown formatting.">
@@ -37,9 +43,5 @@
     </div>
     <div class="previewNote">
         <markdown [data]="note.value"></markdown>
-    </div>
-
-    <div>
-        <button mat-raised-button color="accent" type="button" (click)="cancelBooking()">Cancel booking</button>
     </div>
 </form>

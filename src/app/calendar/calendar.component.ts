@@ -56,7 +56,7 @@ export class CalendarComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.getScreenSize();
     this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id).pipe(
-      map(bookings => bookings.filter(booking => booking.cancelled === false))
+      map(bookings => bookings.filter(booking => booking.status !== 'cancelled'))
     ).subscribe((bookings: Booking[]) => this.bookings = bookings);
   }
 
@@ -64,7 +64,7 @@ export class CalendarComponent implements OnInit, OnDestroy, OnChanges {
     this.currentOffset = 0;
     this.setMonthOffsets();
     this.subsBooking = this.bookingService.getCaravanBookings(this.caravan.id).pipe(
-      map(bookings => bookings.filter(booking => booking.cancelled === false))
+      map(bookings => bookings.filter(booking => booking.status !== 'cancelled'))
     ).subscribe((bookings: Booking[]) => this.bookings = bookings);
   }
 
