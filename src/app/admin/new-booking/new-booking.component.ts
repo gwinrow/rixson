@@ -204,7 +204,8 @@ export class NewBookingComponent implements OnInit {
             this.fillBooking(van);
           } else {
             this.caravanService.getCaravan(caravanId).subscribe(caravan => {
-              observer.next(this.selectedVan);
+              this.caravanId.setValue(caravanId);
+              observer.next(caravan);
               this.fillBooking(caravan);
               });
           }
