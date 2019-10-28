@@ -12,8 +12,11 @@
     <ng-container *ngIf="!caravan.smoking"><mat-icon matTooltip="smoking is not allowed" matTooltipPosition="above">smoke_free</mat-icon></ng-container>
     <ng-container *ngIf="caravan.smoking"><mat-icon matTooltip="smoking is allowed" matTooltipPosition="above">smoking_rooms</mat-icon></ng-container>
     <ng-container *ngIf="caravan.pets"><mat-icon matTooltip="pets are allowed" matTooltipPosition="above">pets</mat-icon></ng-container>
-  </p>  
+  </p>
   <h2>{{caravan.summary}}</h2>
   <markdown [data]="caravan.description"></markdown>
+  <div class="mat-toolbar mat-primary">
+    <p class="cta">To book this caravan contact us 01754 881337 / 07825 183 774 / <a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a></p>
+  </div>
   <app-calendar [caravan]="caravan"></app-calendar>
 </div>

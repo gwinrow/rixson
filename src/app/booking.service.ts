@@ -13,30 +13,13 @@ export class BookingService {
   getBooking(bookingId): Observable<Booking> {
     return this.afs.doc<Booking>(this.COLLECTION_PATH + bookingId).valueChanges();
   }
-  getBookings(): Observable<Booking[]> {
-    const nowmillis = Date.now();
-    return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
-      map((bookings: Booking[]) => bookings.filter(booking => {
-        const dateTo = new Date(booking.dateTo);
-        return dateTo.getTime() > nowmillis;
-        })
-      ),
-      map((bookings: Booking[]) => bookings.sort((a, b) => {
-        const adate = new Date(a.dateFrom);
-        const bdate = new Date(b.dateFrom);
-        return adate.getTime() - bdate.getTime();
-        })
-      ),
-      catchError(this.handleError('getBookings', []))
-    );
-  }
   getAllBookings(): Observable<Booking[]> {
     const nowmillis = Date.now();
     return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
       map((bookings: Booking[]) => bookings.sort((a, b) => {
         const adate = new Date(a.dateFrom);
         const bdate = new Date(b.dateFrom);
-        return adate.getTime() - bdate.getTime();
+        return bdate.getTime() - adate.getTime();
         })
       ),
       catchError(this.handleError('getAllBookings', []))
@@ -46,15 +29,10 @@ export class BookingService {
     const nowmillis = Date.now();
     return this.afs.collection<Booking>(this.COLLECTION).valueChanges().pipe(
       map((bookings: Booking[]) => bookings.filter(booking => booking.caravanId === caravanId)),
-      map((bookings: Booking[]) => bookings.filter(booking => {
-        const dateTo = new Date(booking.dateTo);
-        return dateTo.getTime() > nowmillis;
-        })
-      ),
       map((bookings: Booking[]) => bookings.sort((a, b) => {
         const adate = new Date(a.dateFrom);
         const bdate = new Date(b.dateFrom);
-        return adate.getTime() - bdate.getTime();
+        return bdate.getTime() - adate.getTime();
         })
       ),
       catchError(this.handleError('getCaravanBookings', []))

@@ -1,3 +1,6 @@
 p, h2, ngx-gallery {
     padding-top: 20px;
 }
+p.cta {
+    padding: 20px;
+}
