@@ -23,6 +23,7 @@ export class EditBookingComponent implements OnInit, OnDestroy {
   bookings: Booking[];
   caravans: Caravan[];
   booking: Booking;
+  filterCaravanId: string;
 
   subsParamMap: Subscription;
   subsBooking: Subscription;
@@ -87,6 +88,10 @@ export class EditBookingComponent implements OnInit, OnDestroy {
     return null;
   }
 
+  get bookingsLink() {
+    return '/admin/bookings/' + this.filterCaravanId;
+  }
+
   update(field: AbstractControl, value: Partial<Booking>) {
     if (field.dirty && field.valid) {
       this.bookingService.updateBooking(this.booking, value);
@@ -128,7 +133,7 @@ export class EditBookingComponent implements OnInit, OnDestroy {
       data => {
         this.update(this.status, { 'status': data });
         if (data === 'cancelled') {
-          this.router.navigate(['/admin/bookings/all']);
+          this.router.navigate(['/admin/bookings/', this.filterCaravanId]);
         }
       }
     );
@@ -166,21 +171,26 @@ export class EditBookingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subsParamMap = this.route.paramMap.pipe(
-      switchMap((params: ParamMap) => of(params.get('id')))
-    ).subscribe(id => {
+      switchMap((params: ParamMap) => of({ caravanId: params.get('caravanId'), id: params.get('id') }) )
+    ).subscribe( val => {
       this.selectedVan = null;
       this.booking = null;
       this.bookings = null;
-      this.subsBooking = this.bookingService.getBooking(id).subscribe((booking: Booking) => {
-        this.booking = booking;
-        this.bookingForm.patchValue(this.booking);
-        this.dateFrom.setValue(moment(this.booking.dateFrom));
-        this.dateTo.setValue(moment(this.booking.dateTo));
-        this.subsCaravan = this.caravanService.getCaravan(booking.caravanId).subscribe(caravan => this.selectedVan = caravan);
-        this.subsBookings = this.bookingService.getCaravanBookings(booking.caravanId).subscribe(bookings => this.bookings = bookings);
-        this.dates.setValidators(this.unavailableDatesValidator);
+      this.filterCaravanId = val.caravanId;
+      this.subsBooking = this.bookingService.getBooking(val.id).subscribe((booking: Booking) => {
+        if (booking.status === 'cancelled') {
+          this.router.navigate(['/admin/bookings/', this.filterCaravanId]);
+        } else {
+          this.booking = booking;
+          this.bookingForm.patchValue(this.booking);
+          this.dateFrom.setValue(moment(this.booking.dateFrom));
+          this.dateTo.setValue(moment(this.booking.dateTo));
+          this.subsCaravan = this.caravanService.getCaravan(booking.caravanId).subscribe(caravan => this.selectedVan = caravan);
+          this.subsBookings = this.bookingService.getCaravanBookings(booking.caravanId).subscribe(bookings => this.bookings = bookings);
+          this.dates.setValidators(this.unavailableDatesValidator);
 
-        this.handleFormChanges();
+          this.handleFormChanges();
+        }
       });
     });
   }

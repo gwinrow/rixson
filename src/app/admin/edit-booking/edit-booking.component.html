@@ -1,4 +1,4 @@
-<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/bookings/all">Bookings</a>
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" [routerLink]="bookingsLink">Bookings</a>
 <h1>Edit Booking<ng-container *ngIf="selectedVan"> for {{selectedVan.name}}</ng-container></h1>
 <form [formGroup]="bookingForm">
     <mat-form-field>
@@ -9,7 +9,7 @@
             <mat-option value="pending">Pending</mat-option>
             <mat-option value="deposit paid">Deposit Paid</mat-option>
             <mat-option value="fully paid">Fully Paid</mat-option>
-            <mat-option value="cancelled">Cancelled</mat-option>
+            <mat-option value="cancelled">---Cancelled---</mat-option>
         </mat-select>
     </mat-form-field>  
     <ng-container formGroupName="dates">
@@ -43,5 +43,8 @@
     </div>
     <div class="previewNote">
         <markdown [data]="note.value"></markdown>
+    </div>
+    <div>
+        <a mat-raised-button color="primary" [routerLink]="bookingsLink">Done</a>
     </div>
 </form>

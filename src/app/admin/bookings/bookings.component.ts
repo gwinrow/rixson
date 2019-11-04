@@ -15,6 +15,7 @@ import { CaravanService } from '../../caravan.service';
 export class BookingsComponent implements OnInit {
   bookings: Booking[];
   caravan: Caravan;
+  filterCaravanId: string;
   showNotesArray: Booking[] = [];
 
   showNotes(booking) {
@@ -59,6 +60,7 @@ export class BookingsComponent implements OnInit {
     ).subscribe(caravanId => {
       this.caravan = null;
       this.bookings = null;
+      this.filterCaravanId = caravanId;
       if (caravanId === 'all') {
         this.bookingService.getAllBookings().subscribe(bookings => {
           this.bookings = bookings;

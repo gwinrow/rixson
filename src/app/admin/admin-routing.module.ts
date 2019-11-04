@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'edit-caravan/:id', component: EditCaravanComponent, canActivate: [AuthGuard] },
   { path: 'bookings/:caravanId', component: BookingsComponent, canActivate: [AuthGuard] },
   { path: 'new-booking/:caravanId', component: NewBookingComponent, canActivate: [AuthGuard] },
-  { path: 'edit-booking/:id', component: EditBookingComponent, canActivate: [AuthGuard] }
+  { path: 'edit-booking/:caravanId/:id', component: EditBookingComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
