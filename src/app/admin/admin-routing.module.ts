@@ -10,6 +10,7 @@ import { EditCaravanComponent } from './edit-caravan/edit-caravan.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { EditBookingComponent } from './edit-booking/edit-booking.component';
+import { BookingCaravanComponent } from './booking-caravan/booking-caravan.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path: 'edit-caravan/:id', component: EditCaravanComponent, canActivate: [AuthGuard] },
   { path: 'bookings/:caravanId', component: BookingsComponent, canActivate: [AuthGuard] },
   { path: 'new-booking/:caravanId', component: NewBookingComponent, canActivate: [AuthGuard] },
-  { path: 'edit-booking/:caravanId/:id', component: EditBookingComponent, canActivate: [AuthGuard] }
+  { path: 'edit-booking/:caravanId/:id', component: EditBookingComponent, canActivate: [AuthGuard] },
+  { path: 'booking-caravan/:caravanId/:id', component: BookingCaravanComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

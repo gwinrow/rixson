@@ -1,0 +1,32 @@
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" [routerLink]="bookingsLink">Bookings</a>
+<h1>Change caravan booked for <ng-container *ngIf="booking"> {{booking.name}}</ng-container></h1>
+<form [formGroup]="bookingCaravanForm" (ngSubmit)="onSubmit()">
+    <ng-container *ngIf="caravans">
+        <mat-form-field>
+            <mat-select placeholder="Caravan" formControlName="caravanId">
+                <mat-option *ngFor="let van of caravans" [value]="van.id">{{van.name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+    <ng-container formGroupName="dates">
+        <mat-form-field>
+            <input matInput [matDatepicker]="pickerFrom" placeholder="From date" formControlName="dateFrom">
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFrom></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput [matDatepicker]="pickerTo" placeholder="To date" formControlName="dateTo">
+            <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+            <mat-datepicker #pickerTo [startAt]="dateFrom.value"></mat-datepicker>
+        </mat-form-field>
+    </ng-container>
+    <ng-container *ngIf="selectedVan">
+        <app-calendar [caravan]="selectedVan"></app-calendar>
+    </ng-container>
+    <div>
+        <span class="error" *ngIf="updateError"><br>{{updateError}}</span>
+        <br>
+        <mat-spinner role="spinner" *ngIf="showSpinner"></mat-spinner>
+        <button id="submit" mat-raised-button *ngIf="!showSpinner" color="primary" type="submit" [disabled]="!bookingCaravanForm.valid">Submit</button>
+    </div>
+</form>

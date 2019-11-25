@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "rixson-222515"
+    "default": "rixson-222515",
+    "dev": "rixsondev"
   }
 }

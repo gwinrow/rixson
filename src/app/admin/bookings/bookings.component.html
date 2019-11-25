@@ -14,7 +14,10 @@
   <mat-card *ngFor="let booking of bookings">
       <ng-container *ngIf="booking.name && booking.caravan">
         <h3>{{booking.name}}</h3>
-        <p><a routerLink="/admin/bookings/{{booking.caravan.id}}">{{booking.caravan.name}}</a></p>
+        <p>
+          <a routerLink="/admin/bookings/{{booking.caravan.id}}" matTooltip="See bookings for this caravan.">{{booking.caravan.name}}</a>
+          <a mat-button [routerLink]="['/admin/booking-caravan', filterCaravanId, booking.id]" *ngIf="booking.status != 'cancelled'">change</a>
+        </p>
         <mat-chip-list *ngIf="booking.status === 'cancelled'">
           <mat-chip selected color="warn">
             Cancelled

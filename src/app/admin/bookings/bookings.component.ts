@@ -20,7 +20,7 @@ export class BookingsComponent implements OnInit {
 
   showNotes(booking) {
     if (this.isShowNotes(booking)) {
-      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking));
+      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking), 1);
     } else {
       this.showNotesArray.push(booking);
     }
@@ -46,7 +46,7 @@ export class BookingsComponent implements OnInit {
 
   deleteBooking(booking: Booking) {
     if (this.isShowNotes(booking)) {
-      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking));
+      this.showNotesArray.splice(this.showNotesArray.findIndex(abooking => abooking === booking), 1);
     }
     this.bookingService.deleteBooking(booking);
   }

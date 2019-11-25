@@ -45,8 +45,8 @@ export class CaravanService {
   }
   deleteImage(caravan: Caravan, index: number) {
     const imagePath = caravan.imageRefs[index];
-    caravan.imageRefs.splice(index);
-    caravan.imageUrls.splice(index);
+    caravan.imageRefs.splice(index, 1);
+    caravan.imageUrls.splice(index, 1);
     const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
     this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
     const imageRef = this.storage.ref(imagePath);

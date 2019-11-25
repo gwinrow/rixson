@@ -55,7 +55,7 @@ export class NewCaravanComponent implements OnInit {
     this.images[index - 1] = temp;
   }
   deleteImage(index: number) {
-    this.images.splice(index);
+    this.images.splice(index, 1);
   }
   onSubmit() {
     this.updateError = '';

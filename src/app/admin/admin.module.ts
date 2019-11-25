@@ -32,6 +32,7 @@ import { NewCaravanComponent } from './new-caravan/new-caravan.component';
 import { BookingsComponent } from './bookings/bookings.component';
 import { NewBookingComponent } from './new-booking/new-booking.component';
 import { EditBookingComponent } from './edit-booking/edit-booking.component';
+import { BookingCaravanComponent } from './booking-caravan/booking-caravan.component';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { EditBookingComponent } from './edit-booking/edit-booking.component';
     BookingsComponent,
     NewBookingComponent,
     EditBookingComponent,
+    BookingCaravanComponent,
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
