@@ -1,7 +1,5 @@
 {
-  "hosting": [
-    {
-      "target": "rixson",
+  "hosting": {
       "public": "dist/rixson",
       "ignore": [
         "firebase.json",
@@ -15,5 +13,4 @@
         }
       ]
     }
-  ]
 }
