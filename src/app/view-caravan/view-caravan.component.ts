@@ -20,8 +20,8 @@ export class ViewCaravanComponent implements OnInit {
   galleryImages: NgxGalleryImage[];
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
-    private service: CaravanService) { }
+              private router: Router,
+              private service: CaravanService) { }
 
   initGallery() {
     this.galleryOptions = [

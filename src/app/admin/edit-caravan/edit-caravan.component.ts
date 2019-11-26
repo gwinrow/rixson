@@ -14,7 +14,9 @@ import { ImageTools } from '../image-tools';
   styleUrls: ['./edit-caravan.component.css']
 })
 export class EditCaravanComponent implements OnInit, OnDestroy {
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
+
   caravan: Caravan;
 
   caravanForm = this.fb.group({
@@ -35,9 +37,9 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
 
   loadImage(event) {
     this.isLoadImageError = false;
-    const _that = this;
-    const imageok = ImageTools.resize(event.target.files[0], { width: 800, height: 600 }, function(image, resized) {
-      _that.service.addImage(_that.caravan, image);
+    const that = this;
+    const imageok = ImageTools.resize(event.target.files[0], { width: 800, height: 600 }, (image, resized) => {
+      that.service.addImage(that.caravan, image);
     });
     if (!imageok) {
       this.isLoadImageError = true;
@@ -57,28 +59,28 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
   }
   handleFormChanges() {
     this.hide.valueChanges.subscribe(
-      data => this.update(this.hide, { 'hide': data })
+      data => this.update(this.hide, { hide: data })
     );
     this.grade.valueChanges.subscribe(
-      data => this.update(this.grade, { 'grade': data })
+      data => this.update(this.grade, { grade: data })
     );
     this.summary.valueChanges.subscribe(
-      data => this.update(this.summary, { 'summary': data })
+      data => this.update(this.summary, { summary: data })
     );
     this.description.valueChanges.subscribe(
-      data => this.update(this.description, { 'description': data })
+      data => this.update(this.description, { description: data })
     );
     this.berths.valueChanges.subscribe(
-      data => this.update(this.berths, { 'berths': data })
+      data => this.update(this.berths, { berths: data })
     );
     this.order.valueChanges.subscribe(
-      data => this.update(this.order, { 'order': data })
+      data => this.update(this.order, { order: data })
     );
     this.pets.valueChanges.subscribe(
-      data => this.update(this.pets, { 'pets': data })
+      data => this.update(this.pets, { pets: data })
     );
     this.smoking.valueChanges.subscribe(
-      data => this.update(this.smoking, { 'smoking': data })
+      data => this.update(this.smoking, { smoking: data })
     );
   }
   get hide(): AbstractControl {
@@ -107,8 +109,8 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
   }
 
   constructor(private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private service: CaravanService) { }
+              private route: ActivatedRoute,
+              private service: CaravanService) { }
 
   ngOnInit() {
     this.route.paramMap.pipe(

@@ -17,7 +17,7 @@ import * as moment from 'moment';
 })
 export class EditBookingComponent implements OnInit, OnDestroy {
 
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
 
   selectedVan: Caravan;
   bookings: Booking[];
@@ -81,7 +81,7 @@ export class EditBookingComponent implements OnInit, OnDestroy {
     if (!this.validateBookingDates(this.bookings)) {
       this.dateFrom.setErrors({unavailableDatesValidator: true});
       this.dateTo.setErrors({unavailableDatesValidator: true});
-      return {'unavailableDates': {value: control.value}};
+      return {unavailableDates: {value: control.value}};
     }
     this.dateFrom.setErrors(null);
     this.dateTo.setErrors(null);
@@ -100,7 +100,7 @@ export class EditBookingComponent implements OnInit, OnDestroy {
 
   handleFormChanges() {
     this.name.valueChanges.subscribe(data => {
-        this.update(this.name, { 'name': data });
+        this.update(this.name, { name: data });
       });
     this.dateFrom.valueChanges.subscribe(
       (data: moment.Moment) => {
@@ -108,7 +108,7 @@ export class EditBookingComponent implements OnInit, OnDestroy {
         data.seconds(1);
         data.minutes(0);
         data.hours(12);
-        this.update(this.dateFrom, { 'dateFrom': data.toJSON() });
+        this.update(this.dateFrom, { dateFrom: data.toJSON() });
       }
     );
     this.dateTo.valueChanges.subscribe(
@@ -117,21 +117,21 @@ export class EditBookingComponent implements OnInit, OnDestroy {
         data.seconds(0);
         data.minutes(0);
         data.hours(12);
-        this.update(this.dateTo, { 'dateTo': data.toJSON() });
+        this.update(this.dateTo, { dateTo: data.toJSON() });
       }
     );
     this.deposit.valueChanges.subscribe(
-      data => this.update(this.deposit, { 'deposit': data })
+      data => this.update(this.deposit, { deposit: data })
     );
     this.price.valueChanges.subscribe(
-      data => this.update(this.price, { 'price': data })
+      data => this.update(this.price, { price: data })
     );
     this.notes.valueChanges.subscribe(
-      data => this.update(this.notes, { 'notes': data })
+      data => this.update(this.notes, { notes: data })
     );
     this.status.valueChanges.subscribe(
       data => {
-        this.update(this.status, { 'status': data });
+        this.update(this.status, { status: data });
         if (data === 'cancelled') {
           this.router.navigate(['/admin/bookings/', this.filterCaravanId]);
         }
@@ -164,10 +164,10 @@ export class EditBookingComponent implements OnInit, OnDestroy {
   }
 
   constructor(private fb: FormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private caravanService: CaravanService,
-    private bookingService: BookingService) { }
+              private router: Router,
+              private route: ActivatedRoute,
+              private caravanService: CaravanService,
+              private bookingService: BookingService) { }
 
   ngOnInit() {
     this.subsParamMap = this.route.paramMap.pipe(

@@ -23,13 +23,13 @@ export class CaravanService {
     let imageRef = this.storage.ref(imagePath);
     const task = imageRef.put(imageFile);
     caravan.imageRefs.push(imagePath);
-    const _that = this;
+    const that = this;
     task.snapshotChanges().pipe(last()).subscribe(() => {
-      imageRef = _that.storage.ref(imagePath);
+      imageRef = that.storage.ref(imagePath);
       imageRef.getDownloadURL().subscribe(url => {
         caravan.imageUrls.push(url);
-        const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
-        _that.afs.doc<Caravan>(_that.COLLECTION_PATH + caravan.id).update(data);
+        const data: Partial<Caravan> = { imageRefs: caravan.imageRefs, imageUrls: caravan.imageUrls};
+        that.afs.doc<Caravan>(that.COLLECTION_PATH + caravan.id).update(data);
       });
     });
   }
@@ -40,14 +40,14 @@ export class CaravanService {
     caravan.imageUrls[index] = caravan.imageUrls[index - 1];
     caravan.imageRefs[index - 1] = imageRef;
     caravan.imageUrls[index - 1] = imageUrl;
-    const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
+    const data: Partial<Caravan> = { imageRefs: caravan.imageRefs, imageUrls: caravan.imageUrls};
     this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
   }
   deleteImage(caravan: Caravan, index: number) {
     const imagePath = caravan.imageRefs[index];
     caravan.imageRefs.splice(index, 1);
     caravan.imageUrls.splice(index, 1);
-    const data: Partial<Caravan> = { 'imageRefs': caravan.imageRefs, 'imageUrls': caravan.imageUrls};
+    const data: Partial<Caravan> = { imageRefs: caravan.imageRefs, imageUrls: caravan.imageUrls};
     this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).update(data);
     const imageRef = this.storage.ref(imagePath);
     imageRef.delete();
@@ -61,19 +61,19 @@ export class CaravanService {
 
   deleteCaravan(caravan: Caravan) {
     this.afs.doc<Caravan>(this.COLLECTION_PATH + caravan.id).delete();
-    const _that = this;
-    caravan.imageRefs.forEach(function(ref) {
-      const imageRef = _that.storage.ref(ref);
+    const that = this;
+    caravan.imageRefs.forEach((ref) => {
+      const imageRef = that.storage.ref(ref);
       imageRef.delete();
     });
   }
 
   newCaravanNoImages(caravan: Caravan): Observable<string> {
     return  new Observable(observer => {
-      const _that = this;
+      const that = this;
       const tasks = new Array<Observable<firebase.storage.UploadTaskSnapshot>>();
       caravan.id = this.afs.createId();
-      const caravansCollection = _that.afs.collection<Caravan>(this.COLLECTION);
+      const caravansCollection = that.afs.collection<Caravan>(this.COLLECTION);
       caravan.createdDate = (new Date()).toJSON();
       caravansCollection.doc(caravan.id).set({...caravan});
       observer.next('SUCCESS');
@@ -82,12 +82,12 @@ export class CaravanService {
 
   newCaravan(caravan: Caravan, images: { imageURL: SafeResourceUrl, imageFile: any }[]): Observable<string> {
     return  new Observable(observer => {
-      const _that = this;
+      const that = this;
       const tasks = new Array<Observable<firebase.storage.UploadTaskSnapshot>>();
       caravan.id = this.afs.createId();
-      images.forEach(function(image) {
-        const imagePath = _that.getImagePath(caravan);
-        const imageRef = _that.storage.ref(imagePath);
+      images.forEach((image) => {
+        const imagePath = that.getImagePath(caravan);
+        const imageRef = that.storage.ref(imagePath);
         const task = imageRef.put(image.imageFile);
         tasks.push(task.snapshotChanges().pipe(last()));
         caravan.imageRefs.push(imagePath);
@@ -95,15 +95,15 @@ export class CaravanService {
       forkJoin(tasks).subscribe(() => {
         // All images should have been uploaded now so create array of observable urls for them.
         const urls = new Array<Observable<string>>();
-        caravan.imageRefs.forEach(function(ref) {
-          const imageRef = _that.storage.ref(ref);
+        caravan.imageRefs.forEach((ref) => {
+          const imageRef = that.storage.ref(ref);
           urls.push(imageRef.getDownloadURL());
         });
         forkJoin(urls).subscribe(urlArray => {
-          urlArray.forEach(function(url) {
+          urlArray.forEach((url) => {
             caravan.imageUrls.push(url);
           });
-          const caravansCollection = _that.afs.collection<Caravan>(this.COLLECTION);
+          const caravansCollection = that.afs.collection<Caravan>(this.COLLECTION);
           caravan.createdDate = (new Date()).toJSON();
           caravansCollection.doc(caravan.id).set({...caravan});
           observer.next('SUCCESS');

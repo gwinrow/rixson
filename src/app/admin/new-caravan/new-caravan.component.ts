@@ -13,7 +13,8 @@ import { ImageTools } from '../image-tools';
   styleUrls: ['./new-caravan.component.css']
 })
 export class NewCaravanComponent implements OnInit {
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
 
   caravanForm = this.fb.group({
     hide: [false, Validators.required],
@@ -34,14 +35,14 @@ export class NewCaravanComponent implements OnInit {
 
   loadImage(event) {
     this.isLoadImageError = false;
-    const _that = this;
-    const imageok = ImageTools.resize(event.target.files[0], { width: 800, height: 600 }, function(image, resized) {
+    const that = this;
+    const imageok = ImageTools.resize(event.target.files[0], { width: 800, height: 600 }, (image, resized) => {
       const url = URL.createObjectURL(image);
-      const srcData: SafeResourceUrl = _that.sanitizer.bypassSecurityTrustResourceUrl(url);
+      const srcData: SafeResourceUrl = that.sanitizer.bypassSecurityTrustResourceUrl(url);
       const imageLoad = new ImageLoad();
       imageLoad.imageURL = srcData;
       imageLoad.imageFile = image;
-      _that.images.push(imageLoad);
+      that.images.push(imageLoad);
     });
     if (!imageok) {
       this.isLoadImageError = true;
@@ -62,20 +63,20 @@ export class NewCaravanComponent implements OnInit {
     if (this.caravanForm.valid) {
       this.showSpinner = true;
       const caravan = new Caravan(this.caravanForm.value);
-      const _that = this;
+      const that = this;
       if (this.images.length) {
         this.service.newCaravan(caravan, this.images).subscribe(
-          x => _that.router.navigate(['/admin/caravans']),
+          x => that.router.navigate(['/admin/caravans']),
           err => {
-            _that.updateError = err;
+            that.updateError = err;
             this.showSpinner = false;
           }
         );
       } else {
         this.service.newCaravanNoImages(caravan).subscribe(
-          x => _that.router.navigate(['/admin/caravans']),
+          x => that.router.navigate(['/admin/caravans']),
           err => {
-            _that.updateError = err;
+            that.updateError = err;
             this.showSpinner = false;
           }
         );
@@ -87,9 +88,9 @@ export class NewCaravanComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder,
-      private sanitizer: DomSanitizer,
-      private router: Router,
-      private service: CaravanService) { }
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private service: CaravanService) { }
 
   ngOnInit() {
   }

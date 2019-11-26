@@ -16,7 +16,8 @@ import * as moment from 'moment';
   styleUrls: ['./new-booking.component.css']
 })
 export class NewBookingComponent implements OnInit {
-  @ViewChild('autosize') autosize: CdkTextareaAutosize;
+
+  @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
 
   selectedVan: Caravan;
   bookings: Booking[];
@@ -44,7 +45,7 @@ export class NewBookingComponent implements OnInit {
           !moment.isMoment(this.dateTo.value)) {
         this.dateFrom.setErrors({unavailableDatesValidator: true});
         this.dateTo.setErrors({unavailableDatesValidator: true});
-        return {'unavailableDates': {value: control.value}};
+        return {unavailableDates: {value: control.value}};
       }
       const dateFrom: moment.Moment = this.dateFrom.value;
       dateFrom.milliseconds(0);
@@ -59,7 +60,7 @@ export class NewBookingComponent implements OnInit {
       if (dateTo.isBefore(dateFrom)) {
         this.dateFrom.setErrors({unavailableDatesValidator: true});
         this.dateTo.setErrors({unavailableDatesValidator: true});
-        return {'unavailableDates': {value: control.value}};
+        return {unavailableDates: {value: control.value}};
       }
       if (!this.bookings) {
         this.dateFrom.setErrors(null);
@@ -77,7 +78,7 @@ export class NewBookingComponent implements OnInit {
       if (bookingUnavailable) {
         this.dateFrom.setErrors({unavailableDatesValidator: true});
         this.dateTo.setErrors({unavailableDatesValidator: true});
-        return {'unavailableDates': {value: control.value}};
+        return {unavailableDates: {value: control.value}};
       }
       this.dateFrom.setErrors(null);
       this.dateTo.setErrors(null);
@@ -164,10 +165,10 @@ export class NewBookingComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder,
-    private bookingService: BookingService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private caravanService: CaravanService) { }
+              private bookingService: BookingService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private caravanService: CaravanService) { }
 
   ngOnInit() {
     this.dates.setValidators(this.unavailableDatesValidator);

@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
   }
   setLargeClass(size: ScreenSize): void {
     this.largeClass = {
-      'large': (size === ScreenSize.LARGE || size === ScreenSize.XLARGE)
+      large: (size === ScreenSize.LARGE || size === ScreenSize.XLARGE)
     };
   }
   getScreenSize(): void {
@@ -69,8 +69,8 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
   constructor(private bpService: BreakPointsService,
-      private auth: AuthService,
-      private userService: UserService,
-      private cookieService: CookieService,
-      private router: Router) {}
+              private auth: AuthService,
+              private userService: UserService,
+              private cookieService: CookieService,
+              private router: Router) {}
 }
