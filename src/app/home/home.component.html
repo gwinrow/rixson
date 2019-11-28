@@ -1,20 +1,15 @@
 <mat-card class="mat-toolbar mat-primary">
-	<mat-card-title>Welcome</mat-card-title>
+	<mat-card-title>{{ (settings | async)?.welcomeTitle }}</mat-card-title>
 	<mat-card-content>
-		<h3>Hi De Hi Campers!</h3>
-		<p>
-			Welcome to our rental caravan site. 
-			We are a small family business with an assortment of 6 and 8 berth caravans 
-			sited on Coastfields caravan park in Ingoldmells, Skegness.
-		</p>
-		<p class="contact"><mat-icon>phone</mat-icon> 01754 881 337 / <mat-icon>smartphone</mat-icon> 07825 183 774 / 
-			<mat-icon>email</mat-icon>&nbsp;<a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a>
+		<markdown [data]="(settings | async)?.welcomeMessage"></markdown>
+		<p class="contact"><mat-icon>phone</mat-icon> {{ (settings | async)?.phone }} / <mat-icon>smartphone</mat-icon> {{ (settings | async)?.mobile }} / 
+			<mat-icon>email</mat-icon>&nbsp;<a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:{{ (settings | async)?.email }}">{{ (settings | async)?.email }}</a>
 		</p>
 	</mat-card-content>
 </mat-card>
 
 <div id="caravan-grid">
-	<h1>Our caravans</h1>
+	<h1>{{ (settings | async)?.welcomeCaravans }}</h1>
 	<mat-grid-list [cols]="getCols()" rowHeight="2:1" gutterSize="20px">
 		<mat-grid-tile routerLink="/view-caravan/{{caravan.id}}" *ngFor="let caravan of caravans" 
 		[ngStyle]="{'background': 'url('+caravan.imageUrls[0]+') center/100% no-repeat'}">

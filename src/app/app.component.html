@@ -1,6 +1,6 @@
 <div>
   <mat-toolbar color="accent">
-    <button mat-button routerLink="/"><h1>Rixson Leisure</h1></button>
+    <button mat-button routerLink="/"><h1>{{ (settings | async)?.title }}</h1></button>
     
     <span *ngIf="size!=screenSize.SMALL && size!=screenSize.XSMALL">
       <button mat-icon-button matTooltip="Home" routerLink="/"><mat-icon>home</mat-icon></button>
@@ -37,19 +37,19 @@
   </div>
     <footer class="mat-toolbar mat-accent">
       <div>
-        Rixson Leisure Holidays, 
-        Thistledown, 
-        Spilsby road, 
-        Skegness, 
-        PE24 4LN <br> 
-        01754 881337 / 07825 183 774 / <a class="mat-toolbar mat-accent" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a>
+        {{ (settings | async)?.bizAddress1 }}, 
+        {{ (settings | async)?.bizAddress2 }}, 
+        {{ (settings | async)?.bizAddress3 }}, 
+        {{ (settings | async)?.bizAddress4 }}, 
+        {{ (settings | async)?.bizPostcode }} <br> 
+        {{ (settings | async)?.phone }} / {{ (settings | async)?.mobile }} / <a class="mat-toolbar mat-accent" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:{{ (settings | async)?.email }}">{{ (settings | async)?.email }}</a>
       </div>
       <div>
-        Coastfields Holiday Parks,
-        Roman Bank, 
-        Ingoldmells, 
-        Skegness, 
-        PE25 1LT 
+        {{ (settings | async)?.parkAddress1 }}, 
+        {{ (settings | async)?.parkAddress2 }}, 
+        {{ (settings | async)?.parkAddress3 }}, 
+        {{ (settings | async)?.parkAddress4 }}, 
+        {{ (settings | async)?.parkPostcode }}
       </div>
       
     </footer>    

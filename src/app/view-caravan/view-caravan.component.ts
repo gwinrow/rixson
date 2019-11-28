@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CaravanService } from '../caravan.service';
 import { Caravan } from '../caravan';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { SettingsService } from '../settings.service';
+import { Settings } from '../settings';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 @Component({
@@ -18,10 +20,11 @@ export class ViewCaravanComponent implements OnInit {
   nextCaravan: Caravan;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
+  settings: Observable<Settings>;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private service: CaravanService) { }
+              private service: CaravanService,
+              private settingsService: SettingsService) { }
 
   initGallery() {
     this.galleryOptions = [
@@ -59,6 +62,7 @@ export class ViewCaravanComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.settings = this.settingsService.getSettings();
     this.route.paramMap.pipe(
       switchMap((params: ParamMap) => of(params.get('id')))
     ).subscribe(id => {
@@ -85,5 +89,4 @@ export class ViewCaravanComponent implements OnInit {
       });
     });
   }
-
 }

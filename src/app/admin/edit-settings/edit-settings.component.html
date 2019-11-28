@@ -1,0 +1,72 @@
+<a mat-button color="primary" routerLink="/admin">Dashboard</a>
+<h1>Edit Settings</h1>
+<form [formGroup]="settingsForm">
+    <mat-form-field>
+        <input matInput placeholder="Title" formControlName="title">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Phone number" formControlName="phone">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Mobile number" formControlName="mobile">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Welcome title" formControlName="welcomeTitle">
+    </mat-form-field>
+    <mat-form-field hintLabel="Use markdown formatting.">
+        <textarea matInput cdkTextareaAutosize #welcomeMessage #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="10" placeholder="Welcome message" formControlName="welcomeMessage"></textarea>
+    </mat-form-field>
+    <br><br>
+    <div class="previewWelcomeMessageLabel">
+        <label>Preview welcome message</label> <a id="mdHelpLink" target="_blank" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
+    </div>
+    <div class="previewWelcomeMessage">
+        <markdown [data]="welcomeMessage.value"></markdown>
+    </div>
+    <mat-form-field>
+        <input matInput placeholder="Welcome caravans title" formControlName="welcomeCaravans">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Cravans call to action" formControlName="caravanCTA">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Business address" formControlName="bizAddress1">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Business address" formControlName="bizAddress2">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Business address" formControlName="bizAddress3">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Business address" formControlName="bizAddress4">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Business postcode" formControlName="bizPostcode">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park address" formControlName="parkAddress1">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park address" formControlName="parkAddress2">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park address" formControlName="parkAddress3">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park address" formControlName="parkAddress4">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park postcode" formControlName="parkPostcode">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Caravan park google maps plus-code" formControlName="parkGoogleMaps">
+    </mat-form-field>
+    <div>
+        <a mat-raised-button color="primary" routerLink="/admin">Back</a>
+    </div>
+</form>

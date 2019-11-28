@@ -16,7 +16,7 @@
   <h2>{{caravan.summary}}</h2>
   <markdown [data]="caravan.description"></markdown>
   <div class="mat-toolbar mat-primary">
-    <p class="cta">To book this caravan contact us 01754 881337 / 07825 183 774 / <a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:irene.rixson@gmail.com">irene.rixson@gmail.com</a></p>
+    <p class="cta">{{ (settings | async)?.caravanCTA }} {{ (settings | async)?.phone }} / {{ (settings | async)?.mobile }} / <a class="mat-toolbar mat-primary" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:{{ (settings | async)?.email }}">{{ (settings | async)?.email }}</a></p>
   </div>
   <app-calendar [caravan]="caravan"></app-calendar>
 </div>

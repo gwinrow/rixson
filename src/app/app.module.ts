@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -39,6 +39,7 @@ import { BookingService } from './booking.service';
 import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { BreakPointsService } from './break-points.service';
+import { SettingsService } from './settings.service';
 
 import { HomeComponent } from './home/home.component';
 import { PricesComponent } from './prices/prices.component';
@@ -84,12 +85,14 @@ import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
     MatRippleModule
   ],
   providers: [
+    Title,
     CaravanService,
     BookingService,
     AuthService,
     UserService,
     BreakPointsService,
-    CookieService
+    CookieService,
+    SettingsService
   ],
   bootstrap: [AppComponent]
 })
