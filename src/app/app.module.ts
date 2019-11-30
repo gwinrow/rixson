@@ -40,6 +40,7 @@ import { AuthService } from './auth.service';
 import { UserService } from './user.service';
 import { BreakPointsService } from './break-points.service';
 import { SettingsService } from './settings.service';
+import { PageService } from './page.service';
 
 import { HomeComponent } from './home/home.component';
 import { PricesComponent } from './prices/prices.component';
@@ -47,6 +48,7 @@ import { InfoComponent } from './info/info.component';
 import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
+import { ViewPageComponent } from './view-page/view-page.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
     InfoComponent,
     AboutComponent,
     ContactComponent,
-    ViewCaravanComponent
+    ViewCaravanComponent,
+    ViewPageComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +95,8 @@ import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
     UserService,
     BreakPointsService,
     CookieService,
-    SettingsService
+    SettingsService,
+    PageService
   ],
   bootstrap: [AppComponent]
 })

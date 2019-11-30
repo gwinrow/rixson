@@ -34,6 +34,9 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { EditBookingComponent } from './edit-booking/edit-booking.component';
 import { BookingCaravanComponent } from './booking-caravan/booking-caravan.component';
 import { EditSettingsComponent } from './edit-settings/edit-settings.component';
+import { PagesComponent } from './pages/pages.component';
+import { NewPageComponent } from './new-page/new-page.component';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 @NgModule({
   imports: [
@@ -67,7 +70,10 @@ import { EditSettingsComponent } from './edit-settings/edit-settings.component';
     NewBookingComponent,
     EditBookingComponent,
     BookingCaravanComponent,
-    EditSettingsComponent
+    EditSettingsComponent,
+    PagesComponent,
+    NewPageComponent,
+    EditPageComponent
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
