@@ -10,24 +10,27 @@ import { UserService } from './user.service';
 import { SettingsService} from './settings.service';
 import { Settings } from './settings';
 import { Title } from '@angular/platform-browser';
+import { PageService } from './page.service';
+import { Page } from './page';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnChanges, OnDestroy {
+export class AppComponent implements OnInit {
 
   size = ScreenSize.MEDIUM;
   screenSize = ScreenSize;
-  subs: Subscription;
+  subsScreenSizeService: Subscription;
   largeClass: {};
   adminCookie = false;
   loggedIn = false;
-  settings: Observable<Settings>;
+  settings: Settings;
+  pages: Page[];
 
   login() {
-    this.auth.signInWithGoogle().subscribe(x => console.log(x));
+    this.auth.signInWithGoogle().subscribe();
   }
   logoff() {
     this.auth.logoff();
@@ -39,21 +42,27 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
     };
   }
   getScreenSize(): void {
-    this.subs = this.bpService.getScreenSize().subscribe((size: ScreenSize) => {
+    this.subsScreenSizeService = this.bpService.getScreenSize().subscribe((size: ScreenSize) => {
       this.size = size;
       this.setLargeClass(size);
     });
   }
   getSettings(): void {
-    this.settings = this.settingsService.getSettings();
-  }
-  ngOnInit() {
-    this.getSettings();
-    this.settings.subscribe(settings => {
+    this.settingsService.getSettings().subscribe(settings => {
+      this.settings = settings;
       if (settings && settings.title) {
         this.titleService.setTitle(settings.title);
       }
     });
+  }
+  getPages(): void {
+    this.pageService.getPages().pipe(
+      map(pages => pages.filter(page => page.hide === false))
+    ).subscribe(pages => this.pages = pages);
+  }
+  ngOnInit() {
+    this.getSettings();
+    this.getPages();
     this.getScreenSize();
     this.auth.user.subscribe(user => {
       if (user) {
@@ -73,19 +82,13 @@ export class AppComponent implements OnInit, OnChanges, OnDestroy {
       map(e => e instanceof NavigationEnd)
     ).subscribe(_ => this.adminCookie = this.cookieService.check('admin'));
   }
-  ngOnChanges() {
-    this.getScreenSize();
-  }
-  ngOnDestroy() {
-    if (this.subs !== undefined) {
-      this.subs.unsubscribe();
-    }
-  }
+
   constructor(private titleService: Title,
               private bpService: BreakPointsService,
               private auth: AuthService,
               private userService: UserService,
               private settingsService: SettingsService,
               private cookieService: CookieService,
+              private pageService: PageService,
               private router: Router) {}
 }

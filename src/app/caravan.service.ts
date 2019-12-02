@@ -14,10 +14,18 @@ export class CaravanService {
   COLLECTION = 'caravans';
   COLLECTION_PATH = this.COLLECTION + '/';
 
-  getImagePath(caravan: Caravan) {
-    return this.COLLECTION_PATH + caravan.id + '/' + caravan.name + '-' + caravan.imageRefs.length;
+  private getImagePath(caravan: Caravan) {
+    let uniquePathFound = false;
+    let path: string;
+    const BASEPATH = this.COLLECTION_PATH + caravan.id + '/' + caravan.name + '-';
+    for (let i = 0; !uniquePathFound && i < 15; i++) {
+      path = BASEPATH + i;
+      if (!caravan.imageRefs.includes(path)) {
+        uniquePathFound = true;
+      }
+    }
+    return path;
   }
-
   addImage(caravan: Caravan, imageFile: any) {
     const imagePath = this.getImagePath(caravan);
     let imageRef = this.storage.ref(imagePath);

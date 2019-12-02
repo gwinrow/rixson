@@ -1,1 +1,7 @@
-<p>view-page works!</p>
+<div *ngIf="page">
+    <h1>{{page.name}}</h1>
+    <img *ngIf="galleryImages.length == 1" src="{{page.imageUrls[0]}}">
+    <ngx-gallery *ngIf="galleryImages.length > 1" [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+    <h2>{{page.headline}}</h2>
+    <markdown [data]="page.content"></markdown>
+</div>

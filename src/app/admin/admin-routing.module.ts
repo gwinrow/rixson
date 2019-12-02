@@ -12,6 +12,9 @@ import { NewBookingComponent } from './new-booking/new-booking.component';
 import { EditBookingComponent } from './edit-booking/edit-booking.component';
 import { BookingCaravanComponent } from './booking-caravan/booking-caravan.component';
 import { EditSettingsComponent } from './edit-settings/edit-settings.component';
+import { PagesComponent } from './pages/pages.component';
+import { NewPageComponent } from './new-page/new-page.component';
+import { EditPageComponent } from './edit-page/edit-page.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
@@ -22,6 +25,9 @@ const routes: Routes = [
   { path: 'new-booking/:caravanId', component: NewBookingComponent, canActivate: [AuthGuard] },
   { path: 'edit-booking/:caravanId/:id', component: EditBookingComponent, canActivate: [AuthGuard] },
   { path: 'booking-caravan/:caravanId/:id', component: BookingCaravanComponent, canActivate: [AuthGuard] },
+  { path: 'pages', component: PagesComponent, canActivate: [AuthGuard] },
+  { path: 'new-page', component: NewPageComponent, canActivate: [AuthGuard] },
+  { path: 'edit-page/:id', component: EditPageComponent, canActivate: [AuthGuard] },
   { path: 'edit-settings', component: EditSettingsComponent, canActivate: [AuthGuard] }
 ];
 

@@ -1,0 +1,69 @@
+form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+input[type=file] {
+    padding: 5px;
+    border-bottom: 1px solid white;
+}
+input[type=file].error {
+    border-bottom: 1px solid red;
+}
+div.previewContent {
+    margin: 0 0 20px 0;
+    padding: 0 10px 0 10px;
+    border: 1px dashed lightgrey;
+}
+label#images, label.previewContent {
+    color: rgba(0,0,0,.6);
+}
+label#images.error, span.error {
+    color: red;
+}
+mat-form-field {
+    width: 100%;
+}
+
+button#submit {
+    margin-top: 20px;
+}
+
+.image {
+    margin: 10px;
+    padding: 20px;
+    width: 340px;
+    border: 1px solid lightgrey;
+    border-radius: 2%;
+}
+.image div.imageLoad {
+    position: relative;
+}
+.image img {
+    width: 100%;
+    height: auto;
+    z-index: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.image button.deleteImage {
+    position: absolute;
+    z-index: 10;
+    left: 290px;
+    top: 20px;
+}
+.image button.moveImage {
+    position: absolute;
+    z-index: 10;
+    left: 10px;
+    top: 20px;
+}
+a#mdHelpLink {
+    display: block;
+    text-align: end;
+    font-size: small;
+    color: #ff4081;
+}
+div.hidePage {
+    margin: 10px;
+}

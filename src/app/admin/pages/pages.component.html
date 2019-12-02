@@ -1,1 +1,16 @@
-<p>pages works!</p>
+<a mat-button color="primary" routerLink="/admin">Dashboard</a>
+<h1>Pages</h1>
+<div id="droplist">
+  <mat-card *ngFor="let page of pages | async">
+      <h3>{{page.name}}</h3>
+      <div id="buttons">
+        <a mat-button routerLink="/admin/edit-page/{{page.id}}">update</a>
+        <a mat-button (click)="deletePage(page)">delete</a>
+      </div>
+  </mat-card>
+</div>
+<span class="done">
+  <button mat-fab color="primary" routerLink="/admin/new-page">
+    <mat-icon>add</mat-icon>
+  </button>
+</span>

@@ -12,12 +12,12 @@ import { UserService } from './user.service';
 export class AuthGuard implements CanActivate {
 
   constructor(private router: Router,
-        private auth: AuthService,
-        private userService: UserService,
-        private cookieService: CookieService) {}
+              private auth: AuthService,
+              private userService: UserService,
+              private cookieService: CookieService) {}
 
   canActivate(next: ActivatedRouteSnapshot,
-          state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+              state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     const expires = new Date();
     expires.setMonth(expires.getMonth() + 12);
     this.cookieService.set('admin', 'true', expires, '/');

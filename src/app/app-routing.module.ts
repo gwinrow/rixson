@@ -7,10 +7,12 @@ import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { AuthGuard } from './auth.guard';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
+import { ViewPageComponent } from './view-page/view-page.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'view-page/:id', component: ViewPageComponent },
   { path: 'prices', component: PricesComponent },
   { path: 'info', component: InfoComponent },
   { path: 'about', component: AboutComponent },

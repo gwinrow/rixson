@@ -1,1 +1,40 @@
-<p>new-page works!</p>
+<a mat-button color="primary" routerLink="/admin">Dashboard</a> &gt; <a mat-button color="primary" routerLink="/admin/pages">Pages</a>
+<h1>New Page</h1>
+<form [formGroup]="pageForm" (ngSubmit)="onSubmit()">
+    <div class="hidePage">
+        <mat-slide-toggle color="primary" formControlName="hide">Hide</mat-slide-toggle>
+    </div>
+    <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Headline" formControlName="headline">
+    </mat-form-field>
+    <mat-form-field hintLabel="Use markdown formatting.">
+        <textarea matInput cdkTextareaAutosize #content #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+        cdkAutosizeMaxRows="10" placeholder="Content" formControlName="content"></textarea>
+    </mat-form-field>
+    <br><br>
+    <label class="previewContent">Preview content</label> <a id="mdHelpLink" target="_blank" href="https://en.wikipedia.org/wiki/Markdown#Example">Formatting help</a>
+    <div class="previewContent">
+        <markdown [data]="content.value"></markdown>
+    </div>
+    <mat-form-field>
+        <input matInput type="number" placeholder="Sort order" formControlName="order">
+    </mat-form-field>
+    <label id="images" [class.error]="isLoadImageError">Images</label>
+    <div class="image">
+        <div class="imageLoad" *ngFor="let image of images; let i = index">
+            <button mat-mini-fab class="moveImage" *ngIf="i !== 0" (click)="moveImageUp(i)" matTooltip="Move image up"><mat-icon>arrow_upward</mat-icon></button>
+            <button mat-mini-fab class="deleteImage" (click)="deleteImage(i)" matTooltip="Delete image"><mat-icon>delete</mat-icon></button>
+            <img [src]="image.imageURL">
+        </div>
+    </div>
+    <input type="file" (change)="loadImage($event)" [class.error]="isLoadImageError"><br>
+    <div>
+        <span class="error" *ngIf="updateError"><br>{{updateError}}</span>
+        <br>
+        <mat-spinner role="spinner" *ngIf="showSpinner"></mat-spinner>
+        <button id="submit" mat-raised-button *ngIf="!showSpinner" color="primary" type="submit" [disabled]="!pageForm.valid">Submit</button>
+    </div>
+</form>

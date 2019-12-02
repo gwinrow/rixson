@@ -17,7 +17,7 @@ export class PageService {
     let uniquePathFound = false;
     let path: string;
     const BASEPATH = this.COLLECTION_PATH + page.id + '/' + page.name + '-';
-    for (let i = 0; !uniquePathFound; i++) {
+    for (let i = 0; !uniquePathFound && i < 15; i++) {
       path = BASEPATH + i;
       if (!page.imageRefs.includes(path)) {
         uniquePathFound = true;
@@ -58,6 +58,21 @@ export class PageService {
     this.afs.doc<Page>(this.COLLECTION_PATH + page.id).update(data);
     const imageRef = this.storage.ref(imagePath);
     imageRef.delete();
+  }
+
+  updatePage(page: Page, data: Partial<Page>) {
+    if (!data.imageRefs && !data.imageUrls) {
+      this.afs.doc<Page>(this.COLLECTION_PATH + page.id).update(data);
+    }
+  }
+
+  deletePage(page: Page) {
+    this.afs.doc<Page>(this.COLLECTION_PATH + page.id).delete();
+    const that = this;
+    page.imageRefs.forEach((ref) => {
+      const imageRef = that.storage.ref(ref);
+      imageRef.delete();
+    });
   }
 
   newPageNoImages(page: Page): Observable<string> {

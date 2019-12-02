@@ -73,6 +73,7 @@ export class ViewCaravanComponent implements OnInit {
         for (let i = 0; i < caravans.length; i++) {
           if (this.caravans[i].id === id) {
             this.caravan = this.caravans[i];
+            this.initGallery();
             if (i > 0) {
               this.prevCaravan = this.caravans[i - 1];
             } else {
@@ -85,7 +86,6 @@ export class ViewCaravanComponent implements OnInit {
             }
           }
         }
-        this.initGallery();
       });
     });
   }

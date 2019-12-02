@@ -25,7 +25,7 @@ export class CaravansComponent implements OnInit {
   }
 
   constructor(private caravanService: CaravanService,
-    private bookingService: BookingService) { }
+              private bookingService: BookingService) { }
 
   ngOnInit() {
     this.caravanService.getCaravans().subscribe(caravans => {

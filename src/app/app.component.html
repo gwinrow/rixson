@@ -1,13 +1,10 @@
 <div>
   <mat-toolbar color="accent">
-    <button mat-button routerLink="/"><h1>{{ (settings | async)?.title }}</h1></button>
-    
+    <button mat-button routerLink="/"><h1>{{ settings?.title }}</h1></button>
     <span *ngIf="size!=screenSize.SMALL && size!=screenSize.XSMALL">
-      <button mat-icon-button matTooltip="Home" routerLink="/"><mat-icon>home</mat-icon></button>
-      <button mat-button matTooltip="Price list" routerLink="/prices">Price list</button>
-      <button mat-button matTooltip="General Information" routerLink="/info">Info</button>
-      <button mat-button matTooltip="About us" routerLink="/about">About us</button>
-      <button mat-button matTooltip="Find us" routerLink="/contact">Find us</button>
+      <button mat-icon-button routerLink="/"><mat-icon>home</mat-icon></button>
+      <button mat-button *ngFor="let page of pages" routerLink="/view-page/{{page.id}}">{{page.name}}</button>
+      <button mat-button routerLink="/contact">Find us</button>
       <ng-container *ngIf="loggedIn || adminCookie">
         <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>settings</mat-icon></button>
         <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>power_settings_new</mat-icon></button>
@@ -20,16 +17,14 @@
     </button> 
   </mat-toolbar>
   <mat-menu x-position="before" #menu="matMenu" panel-class="primary">
-    <button mat-icon-button matTooltip="Home" routerLink="/"><mat-icon>home</mat-icon></button>
-    <button mat-icon-button matTooltip="Price list" routerLink="/prices"><mat-icon>monetization_on</mat-icon></button>
-    <button mat-icon-button matTooltip="General Information" routerLink="/info"><mat-icon>info</mat-icon></button>
-    <button mat-icon-button matTooltip="About us" routerLink="/about"><mat-icon>help</mat-icon></button>
-    <button mat-icon-button matTooltip="Find us" routerLink="/contact"><mat-icon>place</mat-icon></button>
+    <button mat-menu-item routerLink="/"><mat-icon>home</mat-icon><span>Home</span></button>
+    <button mat-menu-item *ngFor="let page of pages" routerLink="/view-page/{{page.id}}">{{page.name}}</button>
+    <button mat-menu-item routerLink="/contact"><mat-icon>place</mat-icon><span>Find us</span></button>
     <ng-container *ngIf="loggedIn || adminCookie">
-      <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>settings</mat-icon></button>
-      <button *ngIf="!loggedIn" mat-icon-button matTooltip="Google sign-in" (click)="login()"><mat-icon>power_settings_new</mat-icon></button>
-      <button *ngIf="loggedIn" mat-icon-button matTooltip="Admin" routerLink="/admin"><mat-icon>settings</mat-icon></button>
-      <button *ngIf="loggedIn" mat-icon-button matTooltip="Logoff" (click)="logoff()"><mat-icon>power_settings_new</mat-icon></button>  
+      <button *ngIf="!loggedIn" mat-menu-item matTooltip="Google sign-in" (click)="login()"><mat-icon>settings</mat-icon><span>Sign-in</span></button>
+      <button *ngIf="!loggedIn" mat-menu-item matTooltip="Google sign-in" (click)="login()"><mat-icon>power_settings_new</mat-icon><span>Sign-in</span></button>
+      <button *ngIf="loggedIn" mat-menu-item matTooltip="Admin" routerLink="/admin"><mat-icon>settings</mat-icon><span>Admin</span></button>
+      <button *ngIf="loggedIn" mat-menu-item matTooltip="Logoff" (click)="logoff()"><mat-icon>power_settings_new</mat-icon><span>Logoff</span></button>  
     </ng-container>
   </mat-menu>
   <div id="content" class="mat-app-background" [ngClass]="largeClass">
@@ -37,19 +32,19 @@
   </div>
     <footer class="mat-toolbar mat-accent">
       <div>
-        {{ (settings | async)?.bizAddress1 }}, 
-        {{ (settings | async)?.bizAddress2 }}, 
-        {{ (settings | async)?.bizAddress3 }}, 
-        {{ (settings | async)?.bizAddress4 }}, 
-        {{ (settings | async)?.bizPostcode }} <br> 
-        {{ (settings | async)?.phone }} / {{ (settings | async)?.mobile }} / <a class="mat-toolbar mat-accent" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:{{ (settings | async)?.email }}">{{ (settings | async)?.email }}</a>
+        {{ settings?.bizAddress1 }}, 
+        {{ settings?.bizAddress2 }}, 
+        {{ settings?.bizAddress3 }}, 
+        {{ settings?.bizAddress4 }}, 
+        {{ settings?.bizPostcode }} <br> 
+        {{ settings?.phone }} / {{ settings?.mobile }} / <a class="mat-toolbar mat-accent" matTooltip="Click to email us" matTooltipPosition="above" target="_blank" href="mailto:{{ settings?.email }}">{{ settings?.email }}</a>
       </div>
       <div>
-        {{ (settings | async)?.parkAddress1 }}, 
-        {{ (settings | async)?.parkAddress2 }}, 
-        {{ (settings | async)?.parkAddress3 }}, 
-        {{ (settings | async)?.parkAddress4 }}, 
-        {{ (settings | async)?.parkPostcode }}
+        {{ settings?.parkAddress1 }}, 
+        {{ settings?.parkAddress2 }}, 
+        {{ settings?.parkAddress3 }}, 
+        {{ settings?.parkAddress4 }}, 
+        {{ settings?.parkPostcode }}
       </div>
       
     </footer>    

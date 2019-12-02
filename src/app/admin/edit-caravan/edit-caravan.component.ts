@@ -21,7 +21,7 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
 
   caravanForm = this.fb.group({
     hide: [false, Validators.required],
-    name: [{value: '', disabled: true}],
+    name: ['', { validators: Validators.required, updateOn: 'blur' }],
     grade: ['bronze', { validators: Validators.required, updateOn: 'blur' }],
     summary: ['', { validators: Validators.required, updateOn: 'blur' }],
     description: ['', { validators: Validators.required, updateOn: 'blur' }],
@@ -61,6 +61,9 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
     this.hide.valueChanges.subscribe(
       data => this.update(this.hide, { hide: data })
     );
+    this.name.valueChanges.subscribe(
+      data => this.update(this.name, { name: data })
+    );
     this.grade.valueChanges.subscribe(
       data => this.update(this.grade, { grade: data })
     );
@@ -85,6 +88,9 @@ export class EditCaravanComponent implements OnInit, OnDestroy {
   }
   get hide(): AbstractControl {
     return this.caravanForm.get('hide');
+  }
+  get name(): AbstractControl {
+    return this.caravanForm.get('name');
   }
   get grade(): AbstractControl {
     return this.caravanForm.get('grade');
