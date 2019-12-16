@@ -43,9 +43,6 @@ import { SettingsService } from './settings.service';
 import { PageService } from './page.service';
 
 import { HomeComponent } from './home/home.component';
-import { PricesComponent } from './prices/prices.component';
-import { InfoComponent } from './info/info.component';
-import { AboutComponent } from './about/about.component';
 import { ContactComponent } from './contact/contact.component';
 import { ViewCaravanComponent } from './view-caravan/view-caravan.component';
 import { ViewPageComponent } from './view-page/view-page.component';
@@ -54,9 +51,6 @@ import { ViewPageComponent } from './view-page/view-page.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    PricesComponent,
-    InfoComponent,
-    AboutComponent,
     ContactComponent,
     ViewCaravanComponent,
     ViewPageComponent
